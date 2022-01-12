@@ -1,7 +1,8 @@
 import Web3 from 'web3'
 import { Interface } from '@ethersproject/abi'
-import web3NoAccount from 'utils/web3'
+import web3NoAccount, { getWeb3NoAccount } from 'utils/web3'
 import { getMulticallContract } from 'utils/contractHelpers'
+import { MAINNET_CHAIN_ID } from '../config'
 
 interface Call {
   address: string // Address of the contract
@@ -13,12 +14,18 @@ interface MulticallOptions {
   web3?: Web3
   blockNumber?: number
   requireSuccess?: boolean
+  chainID?: string
 }
 
-const multicall = async (abi: any[], calls: Call[], options: MulticallOptions = {}) => {
-    const multi = getMulticallContract(options.web3 || web3NoAccount)
+const multicall = async (abi: any[], calls: Call[], options: MulticallOptions = {}, chainID = MAINNET_CHAIN_ID) => {
+  console.log(chainID)
+  console.log(getWeb3NoAccount(chainID))
+  // console.log('----')
+  // console.log(web3NoAccount)
+    const multi = getMulticallContract(options.web3 || getWeb3NoAccount(chainID), chainID)
     const itf = new Interface(abi)
-
+    // console.log(chainID)
+    // console.log(multi)
     const calldata = calls.map((call) => [call.address.toLowerCase(), itf.encodeFunctionData(call.name, call.params)])
     const { returnData } = await multi.methods.aggregate(calldata).call(undefined, options.blockNumber)
     const res = returnData.map((call, i) => itf.decodeFunctionResult(calls[i].name, call))

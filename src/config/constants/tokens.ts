@@ -629,6 +629,8 @@ const tokens = {
     address: {
       56: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
       97: '',
+      1: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+      3: '0xc778417e063141139fce010982780140aa0cd5ab',
     },
     decimals: 18,
     projectLink: 'https://ethereum.org/en/',
@@ -1597,10 +1599,12 @@ const tokens = {
     projectLink: 'https://decentral.games/',
   },
   srkb: {
-    symbol: 'SRKb',
+    symbol: 'SRK',
     address: {
       56: '0xC3440c10c4F36f354eB591B19FafB4906d449B75',
       97: '0xC3440c10c4F36f354eB591B19FafB4906d449B75',
+      3: '0x962d8c38d4088f3f62e70740df46db214718a855',
+      1: '0x0488401c3f535193fa8df029d9ffe615a06e74e6',
     },
     decimals: 18,
     iconExtension: 'png',

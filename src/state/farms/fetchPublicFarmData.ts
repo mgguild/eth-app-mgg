@@ -26,18 +26,18 @@ type PublicFarmData = {
 }
 
 const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
-  const { pid, lpAddresses, token, quoteToken, stakingAddresses } = farm
-  const lpAddress = getAddress(lpAddresses)
+  const { pid, lpAddresses, token, quoteToken, stakingAddresses, chain } = farm
+  const lpAddress = getAddress(lpAddresses, chain)
   const calls = [
     // Balance of token in the LP contract
     {
-      address: getAddress(token.address),
+      address: getAddress(token.address, chain),
       name: 'balanceOf',
       params: [lpAddress],
     },
     // Balance of quote token on LP contract
     {
-      address: getAddress(quoteToken.address),
+      address: getAddress(quoteToken.address, chain),
       name: 'balanceOf',
       params: [lpAddress],
     },
@@ -45,7 +45,7 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
     {
       address: lpAddress,
       name: 'balanceOf',
-      params: [getMasterChefAddress()],
+      params: [getMasterChefAddress(chain)],
     },
     // Total supply of LP tokens
     {
@@ -54,31 +54,34 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
     },
     // Token decimals
     {
-      address: getAddress(token.address),
+      address: getAddress(token.address, chain),
       name: 'decimals',
     },
     // Quote token decimals
     {
-      address: getAddress(quoteToken.address),
+      address: getAddress(quoteToken.address, chain),
       name: 'decimals',
     },
   ]
+  // console.log(farm.lpSymbol)
 
   const [tokenBalanceLP, quoteTokenBalanceLP, lpTokenBalanceMC, lpTotalSupply, tokenDecimals, quoteTokenDecimals] =
-    await multicall(erc20, calls)
+    await multicall(erc20, calls, {}, chain)
+  // console.log(farm.lpSymbol)
+  // console.log(tokenBalanceLP)
   const lpStakingCalls = [
     // Total deposits in staking address
     {
-      address: getAddress(stakingAddresses),
+      address: getAddress(stakingAddresses, chain),
       name: 'totalSupply',
     },
     // Total deposits in staking address
     {
-      address: getAddress(stakingAddresses),
+      address: getAddress(stakingAddresses, chain),
       name: 'periodFinish',
     },
     {
-      address: getAddress(stakingAddresses),
+      address: getAddress(stakingAddresses, chain),
       name: 'rewardRate',
     },
   ]
@@ -116,12 +119,12 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
     pid || pid === 0
       ? await multicall(masterchefABI, [
         {
-          address: getMasterChefAddress(),
+          address: getMasterChefAddress(chain),
           name: 'poolInfo',
           params: [pid],
         },
         {
-          address: getMasterChefAddress(),
+          address: getMasterChefAddress(chain),
           name: 'totalAllocPoint',
         },
       ])

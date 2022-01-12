@@ -2,7 +2,9 @@ import { TranslatableText } from 'state/types'
 
 export interface Address {
   97?: string
-  56: string
+  56?: string
+  1?: string
+  3?: string
 }
 
 export interface Token {
@@ -64,6 +66,7 @@ export interface FarmConfig {
   liquidityUrl?: string
   infoURL?: string
   isPromoted?: number
+  chain?: string
   dual?: {
     rewardPerBlock: number
     earnLabel: string

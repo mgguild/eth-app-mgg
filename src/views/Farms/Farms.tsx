@@ -140,8 +140,8 @@ const Farms: React.FC = () => {
   // const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && !farm.hasEnded && !isArchivedPid(farm.pid))
   // const inactiveFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.hasEnded && !isArchivedPid(farm.pid))
   // const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
-  const activeFarms = farmsLP.filter((farm) => farm.pid === 260 && !farm.hasEnded && !isArchivedPid(farm.pid))
-  const inactiveFarms = farmsLP.filter((farm) => farm.pid === 260 && farm.hasEnded && !isArchivedPid(farm.pid))
+  const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && !farm.hasEnded && !isArchivedPid(farm.pid))
+  const inactiveFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.hasEnded && !isArchivedPid(farm.pid))
   const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
 
   const stakedOnlyFarms = activeFarms.filter(
@@ -400,6 +400,7 @@ const Farms: React.FC = () => {
   const {LPPrice, rewardPrice} = useFarmPrice(Number(mggFarm.lpTotalSupply), mggFarm.token.address[56], mggFarm.pairToken.address[56], mggFarm.quoteToken.address[56])
   const apr = getFarmV2Apr(LPPrice, rewardPrice, Number(mggFarm.totalDeposits), Number(mggFarm.rewardRate))
   const totalStaked = getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)
+
   return (
     <>
       <PageHeader>
@@ -445,7 +446,7 @@ const Farms: React.FC = () => {
       <Page>
         { /* <ControlContainer>
           <ViewControls>
-            <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} /> 
+            <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
             <ToggleWrapper>
               <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale='sm' />
               <Text> {t('Staked only')}</Text>
@@ -493,7 +494,7 @@ const Farms: React.FC = () => {
               <Text textTransform='uppercase'>{t('Search')}</Text>
               <SearchInput onChange={handleChangeQuery} placeholder='Search Farms' />
             </LabelWrapper>
-          </FilterContainer> 
+          </FilterContainer>
         </ControlContainer> */}
 
         {renderContent()}

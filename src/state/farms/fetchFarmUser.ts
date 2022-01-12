@@ -7,8 +7,8 @@ import lpStakingAbi from 'config/abi/lpStaking.json'
 
 export const fetchFarmUserAllowances = async (account: string, farmsToFetch: FarmConfig[]) => {
   const calls = farmsToFetch.map((farm) => {
-    const lpContractAddress = getAddress(farm.lpAddresses)
-    return { address: lpContractAddress, name: 'allowance', params: [account, getAddress(farm.stakingAddresses)] }
+    const lpContractAddress = getAddress(farm.lpAddresses, farm.chain)
+    return { address: lpContractAddress, name: 'allowance', params: [account, getAddress(farm.stakingAddresses, farm.chain)] }
   })
 
   const rawLpAllowances = await multicall(erc20ABI, calls)
@@ -20,7 +20,7 @@ export const fetchFarmUserAllowances = async (account: string, farmsToFetch: Far
 
 export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: FarmConfig[]) => {
   const calls = farmsToFetch.map((farm) => {
-    const lpContractAddress = getAddress(farm.lpAddresses)
+    const lpContractAddress = getAddress(farm.lpAddresses, farm.chain)
     return {
       address: lpContractAddress,
       name: 'balanceOf',
@@ -38,7 +38,7 @@ export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: 
 export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch: FarmConfig[]) => {
   const calls = farmsToFetch.map((farm) => {
     return {
-      address: getAddress(farm.stakingAddresses),
+      address: getAddress(farm.stakingAddresses, farm.chain),
       name: 'balanceOf',
       params: [account],
     }
@@ -55,7 +55,7 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
 export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmConfig[]) => {
   const calls = farmsToFetch.map((farm) => {
     return {
-      address: getAddress(farm.stakingAddresses),
+      address: getAddress(farm.stakingAddresses, farm.chain),
       name: 'earned',
       params: [account],
     }
