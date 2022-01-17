@@ -22,42 +22,42 @@ const farms: FarmConfig[] = [
    * INTERNAL STAKING POOLS
    */
   // OWN - BNB - OWN
-  {
-    pid: 251,
-    lpSymbol: 'SRKb-BNB LP',
-    lpAddresses: {
-      97: '',
-      56: '0xD581CdF609DD50fbaa25118583c6EE31b39662F9',
-    },
-    stakingAddresses: {
-      97: '',
-      56: '0xCec445174D6f4e87d38d43d4b13E36dd55CC56A1',
-    },
-    token: tokens.srkb,
-    pairToken: tokens.wbnb,
-    quoteToken: tokens.srkb,
-  },
-  {
-    pid: 252,
-    lpSymbol: 'SRKb-BNB LP',
-    lpAddresses: {
-      97: '',
-      56: '0xD581CdF609DD50fbaa25118583c6EE31b39662F9',
-    },
-    stakingAddresses: {
-      97: '',
-      56: '0xCec445174D6f4e87d38d43d4b13E36dd55CC56A1',
-    },
-    token: tokens.srkb,
-    pairToken: tokens.wbnb,
-    quoteToken: tokens.srkb,
-  },
+  // {
+  //   pid: 251,
+  //   lpSymbol: 'SRKb-BNB LP',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0xD581CdF609DD50fbaa25118583c6EE31b39662F9',
+  //   },
+  //   stakingAddresses: {
+  //     97: '',
+  //     56: '0xCec445174D6f4e87d38d43d4b13E36dd55CC56A1',
+  //   },
+  //   token: tokens.srkb,
+  //   pairToken: tokens.wbnb,
+  //   quoteToken: tokens.srkb,
+  // },
+  // {
+  //   pid: 252,
+  //   lpSymbol: 'SRKb-BNB LP',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0xD581CdF609DD50fbaa25118583c6EE31b39662F9',
+  //   },
+  //   stakingAddresses: {
+  //     97: '',
+  //     56: '0xCec445174D6f4e87d38d43d4b13E36dd55CC56A1',
+  //   },
+  //   token: tokens.srkb,
+  //   pairToken: tokens.wbnb,
+  //   quoteToken: tokens.srkb,
+  // },
 
   /**
    * EXTERNAL STAKING POOLS
    */
   {
-    pid: 259,
+    pid: 260,
     lpSymbol: 'SRK-ETH LP',
     lpAddresses: {
       97: '',
@@ -77,6 +77,22 @@ const farms: FarmConfig[] = [
     isPromoted: 1,
     chain: '3'
   },
+  // {
+  //   pid: 259,
+  //   lpSymbol: 'BHC-BUSD LP',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x19e3cd6418d81d69a71b3fc931387a2062c5a815',
+  //   },
+  //   stakingAddresses: {
+  //     97: '',
+  //     56: '0xD314dbD9998401770943EcdBE97f78Ea2f0dEE62',
+  //   },
+  //   token: tokens.bhc,
+  //   pairToken: tokens.busd,
+  //   quoteToken: tokens.bhc,
+  //   isPromoted: 1
+  // },
 
 ]
 

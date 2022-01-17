@@ -42,11 +42,11 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
       params: [lpAddress],
     },
     // Balance of LP tokens in the master chef contract
-    {
-      address: lpAddress,
-      name: 'balanceOf',
-      params: [getMasterChefAddress(chain)],
-    },
+    // {
+    //   address: lpAddress,
+    //   name: 'balanceOf',
+    //   params: [getMasterChefAddress(chain)],
+    // },
     // Total supply of LP tokens
     {
       address: lpAddress,

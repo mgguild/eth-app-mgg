@@ -11,7 +11,7 @@ export const fetchFarmUserAllowances = async (account: string, farmsToFetch: Far
     return { address: lpContractAddress, name: 'allowance', params: [account, getAddress(farm.stakingAddresses, farm.chain)] }
   })
 
-  const rawLpAllowances = await multicall(erc20ABI, calls)
+  const rawLpAllowances = await multicall(erc20ABI, calls, {})
   const parsedLpAllowances = rawLpAllowances.map((lpBalance) => {
     return new BigNumber(lpBalance).toJSON()
   })
@@ -28,7 +28,7 @@ export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: 
     }
   })
 
-  const rawTokenBalances = await multicall(erc20ABI, calls)
+  const rawTokenBalances = await multicall(erc20ABI, calls, {})
   const parsedTokenBalances = rawTokenBalances.map((tokenBalance) => {
     return new BigNumber(tokenBalance).toJSON()
   })
@@ -45,7 +45,7 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
   })
 
 
-  const rawStakedBalances = await multicall(lpStakingAbi, calls)
+  const rawStakedBalances = await multicall(lpStakingAbi, calls, {})
   const parsedStakedBalances = rawStakedBalances.map((stakedBalance) => {
     return new BigNumber(stakedBalance[0]._hex).toJSON()
   })
@@ -61,7 +61,7 @@ export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmC
     }
   })
 
-  const rawEarnings = await multicall(lpStakingAbi, calls)
+  const rawEarnings = await multicall(lpStakingAbi, calls, {})
   const parsedEarnings = rawEarnings.map((earnings) => {
     return new BigNumber(earnings).toJSON()
   })
