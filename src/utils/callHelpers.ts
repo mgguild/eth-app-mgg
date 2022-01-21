@@ -161,9 +161,9 @@ export const soushHarvestBnb = async (sousChefContract, account) => {
     })
 }
 
-const chainId = parseInt(process.env.REACT_APP_CHAIN_ID, 10)
-const cakeBnbPid = 251
-const cakeBnbFarm = farms.find((farm) => farm.pid === cakeBnbPid)
+// const chainId = parseInt(process.env.REACT_APP_CHAIN_ID, 10)
+// const cakeBnbPid = 251
+// const cakeBnbFarm = farms.find((farm) => farm.pid === cakeBnbPid)
 
 // const CAKE_TOKEN = new Token(chainId, getCakeAddress(), 18)
 // const WBNB_TOKEN = new Token(chainId, tokens.wbnb.address[chainId], 18)

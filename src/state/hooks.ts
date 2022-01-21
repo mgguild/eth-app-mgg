@@ -322,13 +322,13 @@ export const useAchievements = () => {
 }
 
 export const usePriceBnbBusd = (): BigNumber => {
-  const bnbBusdFarm = useFarmFromPid(252)
-  return new BigNumber(bnbBusdFarm.quoteToken.busdPrice)
+  // const bnbBusdFarm = useFarmFromPid(252)
+  return new BigNumber(1)
 }
 
 export const usePriceCakeBusd = (): BigNumber => {
-  const cakeBnbFarm = useFarmFromPid(251)
-  return new BigNumber(cakeBnbFarm.token.busdPrice)
+  // const cakeBnbFarm = useFarmFromPid(251)
+  return new BigNumber(1)
 }
 
 // Block
