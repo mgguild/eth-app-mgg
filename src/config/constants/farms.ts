@@ -21,59 +21,28 @@ const farms: FarmConfig[] = [
   /**
    * INTERNAL STAKING POOLS
    */
-  // OWN - BNB - OWN
-  // {
-  //   pid: 251,
-  //   lpSymbol: 'SRKb-BNB LP',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0xD581CdF609DD50fbaa25118583c6EE31b39662F9',
-  //   },
-  //   stakingAddresses: {
-  //     97: '',
-  //     56: '0xCec445174D6f4e87d38d43d4b13E36dd55CC56A1',
-  //   },
-  //   token: tokens.srkb,
-  //   pairToken: tokens.wbnb,
-  //   quoteToken: tokens.srkb,
-  // },
-  // {
-  //   pid: 252,
-  //   lpSymbol: 'SRKb-BNB LP',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0xD581CdF609DD50fbaa25118583c6EE31b39662F9',
-  //   },
-  //   stakingAddresses: {
-  //     97: '',
-  //     56: '0xCec445174D6f4e87d38d43d4b13E36dd55CC56A1',
-  //   },
-  //   token: tokens.srkb,
-  //   pairToken: tokens.wbnb,
-  //   quoteToken: tokens.srkb,
-  // },
 
   /**
    * EXTERNAL STAKING POOLS
    */
   {
     pid: 260,
-    lpSymbol: 'SRK-ETH LP',
+    lpSymbol: 'MGG-ETH LP',
     lpAddresses: {
       97: '',
       56: '',
-      3: '0xc4332e188dc102ae650c63943fe0ca4f2c395abf',
+      3: '0xd787da7db25da0b6afde5dba1508b85947a95807',
       1: '',
     },
     stakingAddresses: {
       97: '',
       56: '',
-      3: '0xed01ddb7ee062d33d88d0af8f5252b4041610a52',
+      3: '0x0623D68625e24f2Aa30dC12b27Ce85Ba547540B6',
       1: '',
     },
-    token: tokens.srkb,
+    token: tokens.mgg,
     pairToken: tokens.eth,
-    quoteToken: tokens.srkb,
+    quoteToken: tokens.mgg,
     isPromoted: 1,
     chain: '3'
   },

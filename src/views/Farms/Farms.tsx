@@ -120,7 +120,7 @@ const Farms: React.FC = () => {
   const cakePrice = usePriceCakeBusd()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = usePersistState(ViewMode.CARD, { localStorageKey: 'sparkswap_farm_view' })
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const [sortOption, setSortOption] = useState('earned')
   const theme = useContext(ThemeContext)
   const isArchived = pathname.includes('archived')
@@ -397,7 +397,7 @@ const Farms: React.FC = () => {
   }
 
   const mggFarm = farmsStakedMemoized[0];
-  const {LPPrice, rewardPrice} = useFarmPrice(Number(mggFarm.lpTotalSupply), mggFarm.token.address[56], mggFarm.pairToken.address[56], mggFarm.quoteToken.address[56])
+  const {LPPrice, rewardPrice} = useFarmPrice(Number(mggFarm.lpTotalSupply), mggFarm.token.address[mggFarm.chain], mggFarm.pairToken.address[mggFarm.chain], mggFarm.quoteToken.address[mggFarm.chain])
   const apr = getFarmV2Apr(LPPrice, rewardPrice, Number(mggFarm.totalDeposits), Number(mggFarm.rewardRate))
   const totalStaked = getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)
 

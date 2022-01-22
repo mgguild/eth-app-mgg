@@ -1598,6 +1598,17 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://decentral.games/',
   },
+  mgg: {
+    symbol: 'MGG',
+    address: {
+      56: '',
+      1: '0x7237C0B30B1355f1B76355582f182F6f04B08740',
+      3: '0x9F7A0406Abe72354006Ac8949c156365A7455e3A',
+    },
+    decimals: 18,
+    iconExtension: 'png',
+    projectLink: 'https://metagg.com/',
+  },
   srkb: {
     symbol: 'SRK',
     address: {
