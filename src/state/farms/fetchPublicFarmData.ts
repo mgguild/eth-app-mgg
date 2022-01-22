@@ -63,12 +63,9 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
       name: 'decimals',
     },
   ]
-  // console.log(farm.lpSymbol)
 
   const [tokenBalanceLP, quoteTokenBalanceLP, lpTokenBalanceMC, lpTotalSupply, tokenDecimals, quoteTokenDecimals] =
     await multicall(erc20, calls, {}, chain)
-  // console.log(farm.lpSymbol)
-  // console.log(tokenBalanceLP)
   const lpStakingCalls = [
     // Total deposits in staking address
     {
@@ -86,7 +83,7 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
     },
   ]
   const [totalSupply, periodFinish, rewardRate] =
-    await multicall(lpStaking, lpStakingCalls)
+    await multicall(lpStaking, lpStakingCalls, {}, chain)
 
   // Total Deposits in staking address
   const totalDeposits = new BigNumber(totalSupply)
@@ -94,7 +91,6 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
   // total reward rate
   const totalRewardRate = new BigNumber(rewardRate).times(60 * 60 * 24 * 7)
 
-  // console.log(totalRewardRate)
 
   const endDate = (new Date(0)).setUTCSeconds(periodFinish)
   const hasEnded = endDate < now()
@@ -115,23 +111,23 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
   const lpTotalInQuoteToken = quoteTokenAmountMc.times(new BigNumber(2))
 
   // Only make masterchef calls if farm has pid
-  const [info, totalAllocPoint] =
-    pid || pid === 0
-      ? await multicall(masterchefABI, [
-        {
-          address: getMasterChefAddress(chain),
-          name: 'poolInfo',
-          params: [pid],
-        },
-        {
-          address: getMasterChefAddress(chain),
-          name: 'totalAllocPoint',
-        },
-      ])
-      : [null, null]
+  // const [info, totalAllocPoint] =
+  //   pid || pid === 0
+  //     ? await multicall(masterchefABI, [
+  //       {
+  //         address: getMasterChefAddress(chain),
+  //         name: 'poolInfo',
+  //         params: [pid],
+  //       },
+  //       {
+  //         address: getMasterChefAddress(chain),
+  //         name: 'totalAllocPoint',
+  //       },
+  //     ])
+  //     : [null, null]
 
-  const allocPoint = info ? new BigNumber(info.allocPoint?._hex) : BIG_ZERO
-  const poolWeight = totalAllocPoint ? allocPoint.div(new BigNumber(totalAllocPoint)) : BIG_ZERO
+  const allocPoint = /* info ? new BigNumber(info.allocPoint?._hex) : */ BIG_ZERO
+  const poolWeight =/* totalAllocPoint ? allocPoint.div(new BigNumber(totalAllocPoint)) : */ BIG_ZERO
 
   return {
     totalDeposits: totalDeposits.toJSON(),

@@ -18,10 +18,6 @@ interface MulticallOptions {
 }
 
 const multicall = async (abi: any[], calls: Call[], options: MulticallOptions = {}, chainID = MAINNET_CHAIN_ID) => {
-  if (chainID === '3') {
-    console.log(chainID)
-    console.log(getWeb3NoAccount(chainID))
-  }
   // console.log('----')
   // console.log(web3NoAccount)
     const multi = getMulticallContract(options.web3 || getWeb3NoAccount(chainID), chainID)
@@ -30,12 +26,6 @@ const multicall = async (abi: any[], calls: Call[], options: MulticallOptions = 
     const { returnData } = await multi.methods.aggregate(calldata).call(undefined, options.blockNumber)
     const res = returnData.map((call, i) => itf.decodeFunctionResult(calls[i].name, call))
 
-      console.log(res)
-    if (chainID === '3') {
-      console.log(res)
-      console.log(chainID)
-      console.log(getWeb3NoAccount(chainID))
-    }
     return res
 }
 

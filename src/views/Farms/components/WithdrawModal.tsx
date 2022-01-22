@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Button, Flex, Modal, Text } from '@sparkpointio/sparkswap-uikit'
+import { Button, Flex, Modal, Text } from '@metagg/mgg-uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import useToast from '../../../hooks/useToast'

@@ -95,7 +95,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
     mainTokenAddress: farm.token.address,
     pairTokenAddress: farm.pairToken.address,
   })
-  
+
   const stakingAddress = getAddress(farm.stakingAddresses);
 
   const addLiquidityUrl = `${farm.liquidityUrl ?? BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`

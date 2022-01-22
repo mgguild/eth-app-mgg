@@ -66,11 +66,9 @@ export const getDefaultGasPrice = () => {
 
 const getContract = (abi: any, address: string, web3?: Web3, account?: string) => {
   const _web3 = web3 ?? web3NoAccount
-  const gasPrice = account ? getSettings(account).gasPrice : getDefaultGasPrice()
+  // const gasPrice = account ? getSettings(account).gasPrice : getDefaultGasPrice()
 
-  return new _web3.eth.Contract(abi as unknown as AbiItem, address, {
-    gasPrice: getGasPriceInWei(gasPrice).toString(),
-  })
+  return new _web3.eth.Contract(abi as unknown as AbiItem, address)
 }
 
 export const getBep20Contract = (address: string, web3?: Web3) => {

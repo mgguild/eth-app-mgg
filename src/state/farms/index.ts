@@ -37,14 +37,14 @@ export const fetchFarmsPublicDataAsync = createAsyncThunk<Farm[], number[]>(
     const farmsWithPriceHelpers = farmsToFetch.concat(priceHelperLpsConfig)
 
     const farms = await fetchFarms(farmsWithPriceHelpers)
-    const farmsWithPrices = await fetchFarmsPrices(farms)
+    // const farmsWithPrices = await fetchFarmsPrices(farms)
 
     // Filter out price helper LP config farms
-    const farmsWithoutHelperLps = farmsWithPrices.filter((farm: Farm) => {
-      return farm.pid || farm.pid === 0
-    })
+    // const farmsWithoutHelperLps = farmsWithPrices.filter((farm: Farm) => {
+    //   return farm.pid || farm.pid === 0
+    // })
 
-    return farmsWithoutHelperLps
+    return farms
   },
 )
 
@@ -82,8 +82,8 @@ export const farmsSlice = createSlice({
   initialState,
   reducers: {
     setLoadArchivedFarmsData: (state, action) => {
-      const loadArchivedFarmsData = action.payload
-      state.loadArchivedFarmsData = loadArchivedFarmsData
+      // const loadArchivedFarmsData = action.payload
+      // state.loadArchivedFarmsData = loadArchivedFarmsData
     },
   },
   extraReducers: (builder) => {
