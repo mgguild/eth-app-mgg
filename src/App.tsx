@@ -20,6 +20,7 @@ const Farms = lazy(() => import('./views/Farms'))
 const Pools = lazy(() => import('./views/Pools'))
 const Lottery = lazy(() => import('./views/Lottery'))
 const Ifos = lazy(() => import('./views/Ifos'))
+const ComingSoon = lazy(() => import('./views/ComingSoon'))
 const NotFound = lazy(() => import('./views/NotFound'))
 const Collectibles = lazy(() => import('./views/Collectibles'))
 const Teams = lazy(() => import('./views/Teams'))
@@ -52,6 +53,16 @@ const App: React.FC = () => {
             </Route>
             <Route path='/pools' exact>
               <Pools />
+            </Route>
+            <Route path='/gamefi' exact>
+              <ComingSoon title="GameFi Vault"/>
+            </Route>
+            <Route path='/launchpad' exact>
+              <ComingSoon title="IGO Launchpad" />
+              {/* <Guildpad /> */}
+            </Route>
+            <Route path='/earning-dashboard' exact>
+              <ComingSoon title="Earning Dashboard" />
             </Route>
             {/* <Route path='/liquidity'>
               <Pools />
