@@ -633,6 +633,7 @@ const tokens = {
       3: '0xc778417e063141139fce010982780140aa0cd5ab',
     },
     decimals: 18,
+    // iconExtension: 'png',
     projectLink: 'https://ethereum.org/en/',
   },
   beth: {
@@ -1606,7 +1607,7 @@ const tokens = {
       3: '0x9F7A0406Abe72354006Ac8949c156365A7455e3A',
     },
     decimals: 18,
-    iconExtension: 'png',
+    // iconExtension: 'png',
     projectLink: 'https://metagg.com/',
   },
   srkb: {
