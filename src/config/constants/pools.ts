@@ -101,8 +101,8 @@ const pools: PoolConfig[] = [
   },
   {
     sousId: 9,
-    stakingToken: tokens.tipsy,
-    earningToken: tokens.tipsy,
+    stakingToken: tokens.mgg,
+    earningToken: tokens.eth,
     contractAddress: {
       97: '0x1DEC10EF7a9F8031715bC09DB5fa0bCC20E2780B',
       56: '0x1DEC10EF7a9F8031715bC09DB5fa0bCC20E2780B',

@@ -15,6 +15,7 @@ const StyledLogo = styled.img`
   width: 50px;
 `
 const PairLogoImg = styled(Flex)`
+  align-items: center;
   margin-bottom: 30px;
   & > * {
     margin-left: 10px;
