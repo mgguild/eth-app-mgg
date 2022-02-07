@@ -235,7 +235,7 @@ const Pools: React.FC = () => {
   const totalStaked = mggPool.totalStaked ? getBalanceNumber(new BigNumber(mggPool.totalStaked.toString()), mggPool.stakingToken.decimals) : 0
   const rewardPerBlock = mggPool?.tokenPerBlock ? getBalanceNumber(new BigNumber(mggPool.tokenPerBlock.toString()), mggPool.earningToken.decimals) : 0
   const {stakingPrice, rewardPrice} = usePoolPrice(mggPool.stakingToken.address[CHAIN_ID], mggPool.earningToken.address[CHAIN_ID ])
-  const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock)
+  const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock) ?? '0'
 
   return (
     <>
