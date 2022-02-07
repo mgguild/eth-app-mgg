@@ -71,6 +71,7 @@ const NUMBER_OF_POOLS_VISIBLE = 12
 
 const Pools: React.FC = () => {
   const theme = useContext(ThemeContext)
+  const CHAIN_ID = process.env.REACT_APP_CHAIN_ID
   const location = useLocation()
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -100,17 +101,17 @@ const Pools: React.FC = () => {
   }, [poolsWithoutAutoVault])
 
   // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
-  const [openPools, finishedPools] = useMemo(() => partition(pools, (pool) => pool.sousId === 9), [pools])
+  const [openPools, nonMggPools] = useMemo(() => partition(pools, (pool) => pool.stakingToken.symbol === 'MGG'), [pools])
   const [upcomingPools, notUpcomingPools] = useMemo(() => partition(pools, (pool) => pool.isComingSoon), [pools])
   const stakedOnlyFinishedPools = useMemo(
     () =>
-      finishedPools.filter((pool) => {
+    nonMggPools.filter((pool) => {
         if (pool.isAutoVault) {
           return accountHasVaultShares
         }
         return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0)
       }),
-    [finishedPools, accountHasVaultShares],
+    [nonMggPools, accountHasVaultShares],
   )
   const stakedOnlyOpenPools = useMemo(
     () =>
@@ -199,9 +200,9 @@ const Pools: React.FC = () => {
   const poolsToShow = () => {
     let chosenPools = []
     if (showUpcomingPools) {
-      chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
+      chosenPools = stakedOnly ? stakedOnlyFinishedPools : nonMggPools
     } else if (showFinishedPools) {
-      chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
+      chosenPools = stakedOnly ? stakedOnlyFinishedPools : nonMggPools
     } else {
       chosenPools = stakedOnly ? stakedOnlyOpenPools : openPools
     }
@@ -230,13 +231,12 @@ const Pools: React.FC = () => {
 
   const tableLayout = <PoolsTable pools={poolsToShow()} account={account} userDataLoaded={userDataLoaded} />
   const { path, url, isExact } = useRouteMatch()
-
-  const mggPool = openPools[0]
+  const mggPool = openPools.filter(pool => pool.stakingToken.symbol === 'MGG' && pool.earningToken.symbol === 'MGG')[0];
   const totalStaked = mggPool.totalStaked ? getBalanceNumber(new BigNumber(mggPool.totalStaked.toString()), mggPool.stakingToken.decimals) : 0
   const rewardPerBlock = mggPool?.tokenPerBlock ? getBalanceNumber(new BigNumber(mggPool.tokenPerBlock.toString()), mggPool.earningToken.decimals) : 0
-  const {stakingPrice, rewardPrice} = usePoolPrice(mggPool.stakingToken.address[56], mggPool.earningToken.address[56])
+  const {stakingPrice, rewardPrice} = usePoolPrice(mggPool.stakingToken.address[CHAIN_ID], mggPool.earningToken.address[CHAIN_ID ])
   const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock)
-  // const totalStaked = getBalanceAmount(new BigNumber(mggPool.totalStaked ?? 0)).toFormat(4)
+
   return (
     <>
       <PageHeader>
@@ -267,7 +267,7 @@ const Pools: React.FC = () => {
                 <Text fontSize="17px" bold color={theme.colors.MGG_accent2}>
                   Total MGG Staked
                 </Text>
-                <Text fontSize="20px"> {totalStaked} MGG</Text>
+                <Text fontSize="20px"> {totalStaked} {mggPool.stakingToken.symbol}</Text>
               </Flex>
               <Flex flexDirection="column">
                 <Text fontSize="17px" bold color={theme.colors.MGG_accent2}>
