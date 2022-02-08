@@ -71,10 +71,9 @@ const NUMBER_OF_POOLS_VISIBLE = 12
 
 const Pools: React.FC = () => {
   const theme = useContext(ThemeContext)
-  const CHAIN_ID = process.env.REACT_APP_CHAIN_ID
   const location = useLocation()
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { pools: poolsWithoutAutoVault, userDataLoaded } = usePools(account)
   const [stakedOnly, setStakedOnly] = usePersistState(false, { localStorageKey: 'pancake_pool_staked' })
   const [numberOfPoolsVisible, setNumberOfPoolsVisible] = useState(NUMBER_OF_POOLS_VISIBLE)
@@ -101,17 +100,17 @@ const Pools: React.FC = () => {
   }, [poolsWithoutAutoVault])
 
   // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
-  const [openPools, nonMggPools] = useMemo(() => partition(pools, (pool) => pool.stakingToken.symbol === 'MGG'), [pools])
-  const [upcomingPools, notUpcomingPools] = useMemo(() => partition(pools, (pool) => pool.isComingSoon), [pools])
+  const [ finishedPools, openPools ] = useMemo(() => partition(pools, (pool) => pool.isFinished), [pools])
+  const [ upcomingPools, notUpcomingPools ] = useMemo(() => partition(pools, (pool) => pool.isComingSoon), [pools])
   const stakedOnlyFinishedPools = useMemo(
     () =>
-    nonMggPools.filter((pool) => {
+    finishedPools.filter((pool) => {
         if (pool.isAutoVault) {
           return accountHasVaultShares
         }
         return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0)
       }),
-    [nonMggPools, accountHasVaultShares],
+    [finishedPools, accountHasVaultShares],
   )
   const stakedOnlyOpenPools = useMemo(
     () =>
@@ -200,9 +199,9 @@ const Pools: React.FC = () => {
   const poolsToShow = () => {
     let chosenPools = []
     if (showUpcomingPools) {
-      chosenPools = stakedOnly ? stakedOnlyFinishedPools : nonMggPools
+      chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
     } else if (showFinishedPools) {
-      chosenPools = stakedOnly ? stakedOnlyFinishedPools : nonMggPools
+      chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
     } else {
       chosenPools = stakedOnly ? stakedOnlyOpenPools : openPools
     }
@@ -231,10 +230,10 @@ const Pools: React.FC = () => {
 
   const tableLayout = <PoolsTable pools={poolsToShow()} account={account} userDataLoaded={userDataLoaded} />
   const { path, url, isExact } = useRouteMatch()
-  const mggPool = openPools.filter(pool => pool.stakingToken.symbol === 'MGG' && pool.earningToken.symbol === 'MGG')[0];
+  const mggPool = openPools.filter((pool) => pool.sousId === 9)[0];
   const totalStaked = mggPool.totalStaked ? getBalanceNumber(new BigNumber(mggPool.totalStaked.toString()), mggPool.stakingToken.decimals) : 0
   const rewardPerBlock = mggPool?.tokenPerBlock ? getBalanceNumber(new BigNumber(mggPool.tokenPerBlock.toString()), mggPool.earningToken.decimals) : 0
-  const {stakingPrice, rewardPrice} = usePoolPrice(mggPool.stakingToken.address[CHAIN_ID], mggPool.earningToken.address[CHAIN_ID ])
+  const {stakingPrice, rewardPrice} = usePoolPrice(mggPool.stakingToken.address[chainId], mggPool.earningToken.address[chainId])
   const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock) ?? '0'
 
   return (
