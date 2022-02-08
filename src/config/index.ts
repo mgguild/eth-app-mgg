@@ -52,3 +52,8 @@ export const BASE_BSC_SCAN_URLS = {
   [MAINNET_CHAIN_ID]: 'https://bscscan.com',
   [TESTNET_CHAIN_ID]: 'https://testnet.bscscan.com',
 }
+
+export const BASE_ETH_SCAN_URLS = {
+  [MAINNET_ETH_CHAIN_ID]: 'https://etherscan.io',
+  [ROPSTEN_CHAIN_ID]: 'https://ropsten.etherscan.io',
+}

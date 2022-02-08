@@ -1,4 +1,4 @@
-import { BASE_BSC_SCAN_URL } from 'config'
+import { BASE_BSC_SCAN_URL, BASE_ETH_SCAN_URL } from 'config'
 
 export const getBscScanAddressUrl = (address: string) => {
   return `${BASE_BSC_SCAN_URL}/address/${address}`
@@ -14,4 +14,22 @@ export const getBscScanBlockNumberUrl = (block: string | number) => {
 
 export const getBscScanBlockCountdownUrl = (block: string | number) => {
   return `${BASE_BSC_SCAN_URL}/block/countdown/${block}`
+}
+
+// Etherscan
+
+export const getEthScanAddressUrl = (address: string) => {
+  return `${BASE_ETH_SCAN_URL}/address/${address}`
+}
+
+export const getEthScanTransactionUrl = (transactionHash: string) => {
+  return `${BASE_ETH_SCAN_URL}/tx/${transactionHash}`
+}
+
+export const getEthScanBlockNumberUrl = (block: string | number) => {
+  return `${BASE_ETH_SCAN_URL}/block/${block}`
+}
+
+export const getEthScanBlockCountdownUrl = (block: string | number) => {
+  return `${BASE_ETH_SCAN_URL}/block/countdown/${block}`
 }

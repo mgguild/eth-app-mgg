@@ -88,13 +88,13 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
         </Box> */}
           <StyledFlex justifyContent="space-between" marginTop="10px">
              <StakeActions
-            isLoading={isLoading}
-            pool={pool}
-            stakingTokenBalance={stakingTokenBalance}
-            stakedBalance={stakedBalance}
-            isBnbPool={isBnbPool}
-            isStaked={isStaked}
-          />
+              isLoading={isLoading}
+              pool={pool}
+              stakingTokenBalance={stakingTokenBalance}
+              stakedBalance={stakedBalance}
+              isBnbPool={isBnbPool}
+              isStaked={isStaked}
+            />
              {/* <HarvestActions
               earnings={earnings}
               earningToken={earningToken}

@@ -52,9 +52,7 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
   )
 
   return (
-    <Flex flexDirection="column" mb="16px" marginLeft="5px"
-          onMouseEnter={() => setActiveSelect(true)}
-          onMouseLeave={() => setActiveSelect(false)}>
+    <Flex flexDirection="column" mb="16px" marginLeft="5px" onMouseEnter={() => setActiveSelect(true)} onMouseLeave={() => setActiveSelect(false)}>
         {/* <Flex flexDirection="column">
           {isLoading ? (
             <Skeleton width="80px" height="48px" />
