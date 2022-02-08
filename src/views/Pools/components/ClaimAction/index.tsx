@@ -68,7 +68,12 @@ const ClaimAction: React.FC<StakeActionsProps> = ({
         <div>
           <Earned>{formatNumber(totalEarnedTokens, 2, 5)}</Earned>
         </div>
-        <Button disabled={userData.stakedBalance.eq(0)} onClick={handleHarvestConfirm} style={{ borderRadius: '3px', height: '40px' }} ml="4px">
+        <Button
+          disabled={userData.stakedBalance.eq(0)}
+          onClick={handleHarvestConfirm}
+          style={{ borderRadius: '3px', height: '40px' }}
+          ml="4px"
+        >
           Claim
         </Button>
       </ActionContent>

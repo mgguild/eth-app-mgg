@@ -75,6 +75,7 @@ export interface FarmConfig {
 }
 
 export interface PoolConfig {
+  mainPool?: boolean
   sousId: number
   earningToken: Token
   stakingToken: Token

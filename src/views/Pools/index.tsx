@@ -230,7 +230,7 @@ const Pools: React.FC = () => {
 
   const tableLayout = <PoolsTable pools={poolsToShow()} account={account} userDataLoaded={userDataLoaded} />
   const { path, url, isExact } = useRouteMatch()
-  const mggPool = openPools.filter((pool) => pool.sousId === 9)[0];
+  const mggPool = openPools.filter((pool) => pool.mainPool)[0];
   const totalStaked = mggPool.totalStaked ? getBalanceNumber(new BigNumber(mggPool.totalStaked.toString()), mggPool.stakingToken.decimals) : 0
   const rewardPerBlock = mggPool?.tokenPerBlock ? getBalanceNumber(new BigNumber(mggPool.tokenPerBlock.toString()), mggPool.earningToken.decimals) : 0
   const {stakingPrice, rewardPrice} = usePoolPrice(mggPool.stakingToken.address[chainId], mggPool.earningToken.address[chainId])

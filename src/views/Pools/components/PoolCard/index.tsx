@@ -23,11 +23,21 @@ import CardActions from './CardActions'
 import { getAddress } from '../../../../utils/addressHelpers'
 import ClaimAction from '../ClaimAction'
 
-
 const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) => {
-  const { sousId, stakingToken, earningToken, isFinished, userData, startBlock, endBlock, isComingSoon, stakingTokenPrice, poolCategory} = pool
+  const {
+    sousId,
+    stakingToken,
+    earningToken,
+    isFinished,
+    userData,
+    startBlock,
+    endBlock,
+    isComingSoon,
+    stakingTokenPrice,
+    poolCategory,
+  } = pool
   const { t } = useTranslation()
-  const { chainId }= useWeb3React()
+  const { chainId } = useWeb3React()
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
   const accountHasStakedBalance = stakedBalance.gt(0)
   const theme = useContext(ThemeContext)
@@ -41,7 +51,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
 
   const temp = new BigNumber(pool.tokenPerBlock).times(new BigNumber(userData.stakedBalance).div(pool.totalStaked))
   const rewardRate = pool?.tokenPerBlock ? getBalanceNumber(temp) : 0
-  
+
   const { currentBlock } = useBlock()
 
   const { shouldShowBlockCountdown, blocksUntilStart, blocksRemaining, hasPoolStarted, blocksToDisplay } =
@@ -52,8 +62,8 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
   const isBnbPool = poolCategory === PoolCategory.BINANCE
   const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock)
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
-  const isLoading = !userData;
-  
+  const isLoading = !userData
+
   return (
     <StyledCard isFinished={isFinished && sousId !== 0}>
       <StyledCardHeader
