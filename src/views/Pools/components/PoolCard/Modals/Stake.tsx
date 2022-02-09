@@ -73,7 +73,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   const remainingStakeTokens = userData?.stakedBalance
     ? getBalanceNumber(new BigNumber(pool.stakingLimit.minus(userData.stakedBalance)), stakingToken.decimals)
     : BIG_ZERO
-  const totalAllowance = useTokenAllowance(stakingToken.address[56], pool.contractAddress[56])
+  const totalAllowance = useTokenAllowance(stakingToken.address[pool.chainId], pool.contractAddress[pool.chainId])
   const { handleApprove, requestedApproval } = useSousApproveWithAmount(
     stakingTokenContract,
     sousId,

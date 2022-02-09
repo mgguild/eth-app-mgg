@@ -3,7 +3,7 @@ import tokens from './tokens'
 import { PoolConfig, PoolCategory } from './types'
 
 const pools: PoolConfig[] = [
-  { 
+  {
     mainPool: true,
     sousId: 9,
     stakingToken: tokens.mgg,
@@ -19,6 +19,7 @@ const pools: PoolConfig[] = [
     tokenPerBlock: '100000000000000000000',
     sortOrder: 999,
     isFinished: false,
+    chainId: 3
   },
 ]
 
