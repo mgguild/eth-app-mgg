@@ -396,7 +396,7 @@ const Farms: React.FC = () => {
     )
   }
 
-  const mggFarm = farmsStakedMemoized[0];
+  const mggFarm = farmsStakedMemoized.filter(farm => farm.isMain)[0];
   const {LPPrice, rewardPrice} = useFarmPrice(Number(mggFarm.lpTotalSupply), mggFarm.token.address[mggFarm.chain], mggFarm.pairToken.address[mggFarm.chain], mggFarm.quoteToken.address[mggFarm.chain])
   const apr = getFarmV2Apr(LPPrice, rewardPrice, Number(mggFarm.totalDeposits), Number(mggFarm.rewardRate))
   const totalStaked = getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)
