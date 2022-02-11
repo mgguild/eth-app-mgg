@@ -45,7 +45,7 @@ const farms: FarmConfig[] = [
     pairToken: tokens.usdc,
     quoteToken: tokens.mgg,
     isPromoted: 1,
-    chain: '3'
+    chain: '1'
   },
   // {
   //   pid: 259,
