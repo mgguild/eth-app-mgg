@@ -19,7 +19,7 @@ const pools: PoolConfig[] = [
     tokenPerBlock: '100000000000000000000',
     sortOrder: 999,
     isFinished: false,
-    chainId: 3
+    chainId: 1
   },
 ]
 

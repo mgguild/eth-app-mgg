@@ -32,20 +32,20 @@ const farms: FarmConfig[] = [
     lpAddresses: {
       97: '',
       56: '',
-      3: '0xd787da7db25da0b6afde5dba1508b85947a95807',
-      1: '',
+      3: '0x8324479F05F79F2d17d05aF0A5db9caa321CB9A3',
+      1: '0x8324479F05F79F2d17d05aF0A5db9caa321CB9A3',
     },
     stakingAddresses: {
       97: '',
       56: '',
-      3: '0x0623D68625e24f2Aa30dC12b27Ce85Ba547540B6',
-      1: '',
+      3: '0xc5A228b9Ec0605944ee7a7cf5CBE528F310257DF',
+      1: '0xc5A228b9Ec0605944ee7a7cf5CBE528F310257DF',
     },
     token: tokens.mgg,
     pairToken: tokens.usdc,
     quoteToken: tokens.mgg,
     isPromoted: 1,
-    chain: '3'
+    chain: '1'
   },
   // {
   //   pid: 259,
