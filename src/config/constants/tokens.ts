@@ -695,6 +695,8 @@ const tokens = {
     address: {
       56: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
       97: '',
+      1: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+      3: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     },
     decimals: 18,
     projectLink: 'https://www.centre.io/usdc',
