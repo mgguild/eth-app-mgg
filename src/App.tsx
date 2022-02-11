@@ -52,7 +52,8 @@ const App: React.FC = () => {
               <Farms />
             </Route>
             <Route path='/pools' exact>
-              <Pools />
+              {/* <Pools /> */}
+              <ComingSoon title="Pools" />
             </Route>
             <Route path='/gamefi' exact>
               <ComingSoon title="GameFi Vault"/>

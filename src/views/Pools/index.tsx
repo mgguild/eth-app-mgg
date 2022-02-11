@@ -268,7 +268,7 @@ const Pools: React.FC = () => {
                 </Text>
                 <Text fontSize="20px"> {totalStaked} {mggPool.stakingToken.symbol}</Text>
               </Flex>
-              <Flex flexDirection="column">
+              {/* <Flex flexDirection="column">
                 <Text fontSize="17px" bold color={theme.colors.MGG_accent2}>
                   Total Value Locked
                 </Text>
@@ -279,7 +279,7 @@ const Pools: React.FC = () => {
                   APR
                 </Text>
                 <Text fontSize="20px"> {apr} % </Text>
-              </Flex>
+              </Flex> */}
             </InfoBox>
           </Flex>
         </Flex>
