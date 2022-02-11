@@ -57,7 +57,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
   const { shouldShowBlockCountdown, blocksUntilStart, blocksRemaining, hasPoolStarted, blocksToDisplay } =
     getPoolBlockInfo(pool, currentBlock)
 
-  const { stakingPrice, rewardPrice } = usePoolPrice(stakingToken.address[pool.chainId], earningToken.address[pool.chainId])
+  const { stakingPrice, rewardPrice } = usePoolPrice(getAddress(stakingToken.address), getAddress(earningToken.address))
   const rate = rewardRate ? formatNumber(rewardRate, 2, 10) : '-'
   const isBnbPool = poolCategory === PoolCategory.BINANCE
   const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock)

@@ -14,6 +14,7 @@ import useTokenBalance from 'hooks/useTokenBalance'
 import { Pool } from 'state/types'
 
 import StakeTokenModal from './Stake'
+import { getAddress } from '../../../../../utils/addressHelpers'
 
 interface StakeModalProps {
   isBnbPool: boolean
@@ -53,7 +54,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const { t } = useTranslation()
   const { theme } = useTheme()
   const [activeSelect, setActiveSelect] = useState(false)
-  const { balance: earnedTokenBalance } = useTokenBalance(pool.earningToken.address[pool.chainId])
+  const { balance: earnedTokenBalance } = useTokenBalance(getAddress(pool.earningToken.address))
   const { toastSuccess, toastError } = useToast()
   const totalStakingTokens = userData?.stakingTokenBalance
     ? getBalanceNumber(new BigNumber(userData.stakingTokenBalance), stakingToken.decimals)
