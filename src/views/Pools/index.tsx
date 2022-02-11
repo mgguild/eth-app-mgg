@@ -264,7 +264,7 @@ const Pools: React.FC = () => {
             <InfoBox style={{ width: '100%' }} margin="20px 0px 0px 0px" justifyContent="space-between">
               <Flex flexDirection="column">
                 <Text fontSize="17px" bold color={theme.colors.MGG_accent2}>
-                  Total MGG-ETH LP Tokens Staked
+                  Total MGG Staked
                 </Text>
                 <Text fontSize="20px"> {totalStaked} {mggPool.stakingToken.symbol}</Text>
               </Flex>
