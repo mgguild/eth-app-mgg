@@ -15,7 +15,7 @@ import { getAddress } from '../../../../utils/addressHelpers'
 import { getBalanceAmount } from '../../../../utils/formatBalance'
 import ExpandableSectionButton from '../../../../components/ExpandableSectionButton'
 import DetailsSection from './DetailsSection'
-import { getBscScanAddressUrl } from '../../../../utils/bscscan'
+import { getBscScanAddressUrl, getEthScanAddressUrl } from '../../../../utils/bscscan'
 
 export interface FarmWithStakedValue extends Farm {
   apr?: number
@@ -170,8 +170,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
 
       <DetailsSection
         removed={removed}
-        stakingAddress={getBscScanAddressUrl(stakingAddress)}
-        lpInfoAddress={`${farm.infoURL?? BASE_INFO_URL}/${lpAddress}`}
+        stakingAddress={getEthScanAddressUrl(stakingAddress)}
+        lpInfoAddress={`${farm.infoURL?? BASE_INFO_URL}/${getAddress(farm.token.address)}`}
         lpLabel={lpLabel}
       />
 
