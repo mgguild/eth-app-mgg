@@ -99,7 +99,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
   const stakingAddress = getAddress(farm.stakingAddresses);
 
   const addLiquidityUrl = `${farm.liquidityUrl ?? BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
-  const AddTokenUrl = `${BASE_EXCHANGE_URL}/#/swap/${farm.token.address[56]}`
+  const AddTokenUrl = `${BASE_EXCHANGE_URL}/#/swap/${farm.token.address[farm.chain]}`
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const isPromotedFarm = farm.token.symbol === 'CAKE'
   const theme = useContext(ThemeContext)
@@ -108,7 +108,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
   const {LPPrice, rewardPrice} = useFarmPrice(Number(farm.lpTotalSupply), farm.token.address[farm.chain], farm.pairToken.address[farm.chain], farm.quoteToken.address[farm.chain])
 
   const aprBlackList = ["0x9f6b80e3867ab402081574e9e0a3be6fdf4ae95b"]
-  const apr = (aprBlackList.includes(farm.lpAddresses[56]) ? null : getFarmV2Apr(LPPrice, rewardPrice, Number(farm.totalDeposits), Number(farm.rewardRate)) )
+  const apr = (aprBlackList.includes(farm.lpAddresses[farm.chain]) ? null : getFarmV2Apr(LPPrice, rewardPrice, Number(farm.totalDeposits), Number(farm.rewardRate)) )
 
   return (
     <FCard isPromotedFarm={isPromotedFarm}>

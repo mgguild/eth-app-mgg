@@ -28,7 +28,7 @@ const farms: FarmConfig[] = [
   {
     isMain: true,
     pid: 260,
-    lpSymbol: 'MGG-ETH LP',
+    lpSymbol: 'MGG-USDC LP',
     lpAddresses: {
       97: '',
       56: '',
@@ -42,7 +42,7 @@ const farms: FarmConfig[] = [
       1: '',
     },
     token: tokens.mgg,
-    pairToken: tokens.eth,
+    pairToken: tokens.usdc,
     quoteToken: tokens.mgg,
     isPromoted: 1,
     chain: '3'
