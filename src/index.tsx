@@ -7,7 +7,7 @@ import Providers from './Providers'
 ReactDOM.render(
   <React.StrictMode>
     <Providers>
-      <MoralisProvider appId={process.env.MORALIS_APP_ID} serverUrl={process.env.MORALIS_SERVER_URL} initializeOnMount >
+      <MoralisProvider appId={process.env.REACT_APP_MORALIS_APP_ID} serverUrl={process.env.REACT_APP_MORALIS_SERVER_URL} >
         <App />
       </MoralisProvider>
     </Providers>
