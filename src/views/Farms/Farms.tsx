@@ -396,12 +396,14 @@ const Farms: React.FC = () => {
     )
   }
 
+
+  
   const mggFarm = farmsStakedMemoized.filter(farm => farm.isMain)[0];
   const {LPPrice, rewardPrice} = useFarmPrice(Number(mggFarm.lpTotalSupply), mggFarm.token.address[mggFarm.chain], mggFarm.pairToken.address[mggFarm.chain], mggFarm.quoteToken.address[mggFarm.chain], mggFarm.lpAddresses[mggFarm.chain])
-  const farmV2Apr = getFarmV2Apr(LPPrice, rewardPrice, Number(mggFarm.totalDeposits), Number(mggFarm.rewardRate))
+  const farmV2Apr = useMemo(() => getFarmV2Apr(LPPrice, rewardPrice, Number(mggFarm.totalDeposits), Number(mggFarm.rewardRate)), [LPPrice, rewardPrice, mggFarm.totalDeposits, mggFarm.rewardRate])
   const apr = farmV2Apr > 0 ? farmV2Apr.toFixed(4) : "-"
   const totalStaked = getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)
-  const tvr = (new BigNumber(totalStaked).times(LPPrice)).toFixed(4)
+  const tvr = useMemo(() => (new BigNumber(totalStaked).times(LPPrice)).toFixed(4), [totalStaked, LPPrice]) 
 
   return (
     <>
