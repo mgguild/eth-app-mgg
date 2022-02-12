@@ -105,7 +105,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
   const theme = useContext(ThemeContext)
 
 
-  const {LPPrice, rewardPrice} = useFarmPrice(Number(farm.lpTotalSupply), farm.token.address[farm.chain], farm.pairToken.address[farm.chain], farm.quoteToken.address[farm.chain])
+  const {LPPrice, rewardPrice} = useFarmPrice(Number(farm.lpTotalSupply), farm.token.address[farm.chain], farm.pairToken.address[farm.chain], farm.quoteToken.address[farm.chain], farm.lpAddresses[farm.chain])
 
   const aprBlackList = ["0x9f6b80e3867ab402081574e9e0a3be6fdf4ae95b"]
   const apr = (aprBlackList.includes(farm.lpAddresses[farm.chain]) ? null : getFarmV2Apr(LPPrice, rewardPrice, Number(farm.totalDeposits), Number(farm.rewardRate)) )
@@ -150,7 +150,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
       <Flex>
         <HarvestAction stakingContract={getAddress(farm.stakingAddresses)}
                        tokenRewardSymbol={earnLabel} userDataReady={userDataReady} userData={farm.userData}
-                       pid={farm.pid} />
+                       pid={farm.pid} rewardTokenPrice={rewardPrice} />
       </Flex>
       {/* <Flex justifyContent='space-between'>
         <Text>{t('APR')}</Text>

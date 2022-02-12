@@ -397,9 +397,11 @@ const Farms: React.FC = () => {
   }
 
   const mggFarm = farmsStakedMemoized.filter(farm => farm.isMain)[0];
-  const {LPPrice, rewardPrice} = useFarmPrice(Number(mggFarm.lpTotalSupply), mggFarm.token.address[mggFarm.chain], mggFarm.pairToken.address[mggFarm.chain], mggFarm.quoteToken.address[mggFarm.chain])
-  const apr = getFarmV2Apr(LPPrice, rewardPrice, Number(mggFarm.totalDeposits), Number(mggFarm.rewardRate))
+  const {LPPrice, rewardPrice} = useFarmPrice(Number(mggFarm.lpTotalSupply), mggFarm.token.address[mggFarm.chain], mggFarm.pairToken.address[mggFarm.chain], mggFarm.quoteToken.address[mggFarm.chain], mggFarm.lpAddresses[mggFarm.chain])
+  const farmV2Apr = getFarmV2Apr(LPPrice, rewardPrice, Number(mggFarm.totalDeposits), Number(mggFarm.rewardRate))
+  const apr = farmV2Apr > 0 ? farmV2Apr.toFixed(4) : "-"
   const totalStaked = getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)
+  const tvr = (new BigNumber(totalStaked).times(LPPrice)).toFixed(4)
 
   return (
     <>
@@ -422,14 +424,14 @@ const Farms: React.FC = () => {
              <Text fontSize='17px' bold color={theme.colors.MGG_accent2}>Total Tokens Staked</Text>
              <Text fontSize='20px'> {totalStaked} {mggFarm.lpSymbol}</Text>
            </Flex>
-           {/* <Flex flexDirection="column">
+           <Flex flexDirection="column">
              <Text fontSize='17px' bold color={theme.colors.MGG_accent2}>Total Value Locked</Text>
-             <Text fontSize='20px'>- USD</Text>
+             <Text fontSize='20px'>{Number(tvr) > 0 ? tvr : "-"} USD</Text>
            </Flex>
            <Flex flexDirection="column">
              <Text fontSize='17px' bold color={theme.colors.MGG_accent2}>APR</Text>
              <Text fontSize='20px'>{apr} % </Text>
-           </Flex> */}
+           </Flex>
         </InfoBox>
         </Flex>
           {/* <Flex style={isMobile ? {
