@@ -34,6 +34,7 @@ export const useTokenPrice = (tokenAddress: string) => {
 
   let _tokenAddress
   try{
+    if (tokenAddress === undefined) throw new Error("Token address undefined");
     _tokenAddress = web3.utils.toChecksumAddress(tokenAddress)
   }
   catch{

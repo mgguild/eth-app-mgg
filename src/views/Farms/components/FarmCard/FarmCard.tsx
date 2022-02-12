@@ -150,7 +150,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
       <Flex>
         <HarvestAction stakingContract={getAddress(farm.stakingAddresses)}
                        tokenRewardSymbol={earnLabel} userDataReady={userDataReady} userData={farm.userData}
-                       pid={farm.pid} />
+                       pid={farm.pid} rewardTokenPrice={rewardPrice} />
       </Flex>
       {/* <Flex justifyContent='space-between'>
         <Text>{t('APR')}</Text>

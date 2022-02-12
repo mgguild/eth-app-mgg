@@ -27,15 +27,16 @@ interface HarvestActionProps {
     earnings: string
   }
   userDataReady: boolean
+  rewardTokenPrice?: number
 }
 
 const HarvestAction: React.FunctionComponent<HarvestActionProps> = (
   {
-    stakingContract, tokenRewardSymbol, pid, userData, userDataReady,
+    stakingContract, tokenRewardSymbol, pid, userData, userDataReady, rewardTokenPrice
   }) => {
-  const earningsBigNumber = new BigNumber(userData.earnings)
-  const cakePrice = usePriceCakeBusd()
-  let earnings = BIG_ZERO
+    const earningsBigNumber = new BigNumber(userData.earnings)
+    const cakePrice = rewardTokenPrice
+    let earnings = BIG_ZERO
   let earningsBusd = 0
   let displayBalance = userDataReady ? earnings.toLocaleString() : <Skeleton width={60} />
 
