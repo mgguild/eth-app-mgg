@@ -6,6 +6,58 @@ import { getBalanceNumber } from 'utils/formatBalance'
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { useWeb3React } from '@web3-react/core'
 
+export const useTokenPrice = (tokenAddress: string) => {
+  const MoralisWeb3Api = useMoralisWeb3Api()
+  const { chainId } = useWeb3React()
+
+  let chainName: "eth" | "ropsten" | "bsc" | "bsc testnet" = "eth"
+  switch (chainId){
+    case 1:
+      chainName = "eth"
+      break
+    case 3:
+      chainName = "ropsten"
+      break
+    case 56:
+      chainName = "bsc"
+      break
+    case 97:
+      chainName = "bsc testnet"
+      break
+    default:
+      chainName = "eth"
+      break
+  }
+
+  const [tokenPrice, setTokenPrice] = useState(0)
+  const web3 = useWeb3()
+
+  let _tokenAddress
+  try{
+    _tokenAddress = web3.utils.toChecksumAddress(tokenAddress)
+  }
+  catch{
+      console.error('Invalid staking and reward address')
+  }
+
+  useEffect(() => {
+      const fetchData = async () => {
+      try {
+          const result = await MoralisWeb3Api.token.getTokenPrice({chain: chainName, address: _tokenAddress})
+          const _tokenPrice = result.usdPrice
+          
+          setTokenPrice(_tokenPrice)
+      } catch (error) {
+        console.error('Unable to fetch data:', error)
+      }
+    }
+
+    fetchData()
+  }, [setTokenPrice, _tokenAddress, MoralisWeb3Api, chainName])
+
+  return {tokenPrice}
+}
+
 export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: string) => {
     const MoralisWeb3Api = useMoralisWeb3Api()
     const { chainId } = useWeb3React()
@@ -61,7 +113,7 @@ export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: st
       }
   
       fetchData()
-    }, [setStakingPrice, setRewardPrice,_stakingTokenAddress, _rewardTokenAddress, MoralisWeb3Api])
+    }, [setStakingPrice, setRewardPrice,_stakingTokenAddress, _rewardTokenAddress, MoralisWeb3Api, chainName])
 
     return {stakingPrice, rewardPrice}
 }
