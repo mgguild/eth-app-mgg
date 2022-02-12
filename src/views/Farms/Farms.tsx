@@ -426,10 +426,10 @@ const Farms: React.FC = () => {
              <Text fontSize='17px' bold color={theme.colors.MGG_accent2}>Total Tokens Staked</Text>
              <Text fontSize='20px'> {totalStaked} {mggFarm.lpSymbol}</Text>
            </Flex>
-           <Flex flexDirection="column">
+           {/* <Flex flexDirection="column">
              <Text fontSize='17px' bold color={theme.colors.MGG_accent2}>Total Value Locked</Text>
              <Text fontSize='20px'>{Number(tvr) > 0 ? tvr : "-"} USD</Text>
-           </Flex>
+           </Flex> */}
            <Flex flexDirection="column">
              <Text fontSize='17px' bold color={theme.colors.MGG_accent2}>APR</Text>
              <Text fontSize='20px'>{apr} % </Text>
