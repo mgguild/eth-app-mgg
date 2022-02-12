@@ -7,6 +7,28 @@ import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { useWeb3React } from '@web3-react/core'
 
 export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: string) => {
+    const MoralisWeb3Api = useMoralisWeb3Api()
+    const { chainId } = useWeb3React()
+
+    let chainName: "eth" | "ropsten" | "bsc" | "bsc testnet" = "eth"
+    switch (chainId){
+      case 1:
+        chainName = "eth"
+        break
+      case 3:
+        chainName = "ropsten"
+        break
+      case 56:
+        chainName = "bsc"
+        break
+      case 97:
+        chainName = "bsc testnet"
+        break
+      default:
+        chainName = "eth"
+        break
+    }
+
     const [stakingPrice, setStakingPrice] = useState(0)
     const [rewardPrice, setRewardPrice] = useState(0)
 
@@ -24,19 +46,22 @@ export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: st
     useEffect(() => {
         const fetchData = async () => {
         try {
-            let assets = await fetch(SPARKSWAP_API.concat(API_ASSETS))
-            assets = await assets.json();
-            const lastPrice = "last_price"
+            let result
+            result = await MoralisWeb3Api.token.getTokenPrice({chain: chainName, address: _stakingTokenAddress})
+            const _stakingTokenPrice = result.usdPrice
+
+            result = await MoralisWeb3Api.token.getTokenPrice({chain: chainName, address: _rewardTokenAddress})
+            const _rewardTokenPrice = result.usdPrice
             
-            setStakingPrice(assets[_stakingTokenAddress][lastPrice])
-            setRewardPrice(assets[_rewardTokenAddress][lastPrice])
+            setStakingPrice(_stakingTokenPrice)
+            setRewardPrice(_rewardTokenPrice)
         } catch (error) {
           console.error('Unable to fetch data:', error)
         }
       }
   
       fetchData()
-    }, [setStakingPrice, setRewardPrice,_stakingTokenAddress, _rewardTokenAddress])
+    }, [setStakingPrice, setRewardPrice,_stakingTokenAddress, _rewardTokenAddress, MoralisWeb3Api])
 
     return {stakingPrice, rewardPrice}
 }
