@@ -405,6 +405,7 @@ const Farms: React.FC = () => {
   const totalStaked = getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)
   // const tvr = useMemo(() => (new BigNumber(totalStaked).times(LPPrice)).toFixed(4), [totalStaked, LPPrice])
   const tvr = useMemo(() => (new BigNumber(mggFarm.lpTotalSupply).times(LPPrice)).toFixed(4), [mggFarm.lpTotalSupply, LPPrice])
+
   return (
     <>
       <PageHeader>
@@ -418,7 +419,7 @@ const Farms: React.FC = () => {
               Liquidity Staking
             </Text>
             <Text color='text' bold style={isMobile ? { fontSize: '17px' } : { fontSize: '27px' }}>
-              Earn MGG and other tokens by staking!
+              Earn MGG with your LP tokens!
             </Text>
           </Flex>
           <InfoBox style={{width: '100%'}} margin="20px 0px 0px 0px" justifyContent="space-between">
@@ -426,10 +427,10 @@ const Farms: React.FC = () => {
              <Text fontSize='17px' bold color={theme.colors.MGG_accent2}>Total Tokens Staked</Text>
              <Text fontSize='20px'> {totalStaked} {mggFarm.lpSymbol}</Text>
            </Flex>
-           {/* <Flex flexDirection="column">
+           <Flex flexDirection="column">
              <Text fontSize='17px' bold color={theme.colors.MGG_accent2}>Total Value Locked</Text>
              <Text fontSize='20px'>{Number(tvr) > 0 ? tvr : "-"} USD</Text>
-           </Flex> */}
+           </Flex>
            <Flex flexDirection="column">
              <Text fontSize='17px' bold color={theme.colors.MGG_accent2}>APR</Text>
              <Text fontSize='20px'>{apr} % </Text>
