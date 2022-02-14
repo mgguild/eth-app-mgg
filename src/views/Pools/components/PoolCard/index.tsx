@@ -56,14 +56,14 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
 
   const { shouldShowBlockCountdown, blocksUntilStart, blocksRemaining, hasPoolStarted, blocksToDisplay } =
     getPoolBlockInfo(pool, currentBlock)
-
+  const stakingAddress = getAddress(pool.contractAddress)
   const { stakingPrice, rewardPrice } = usePoolPrice(getAddress(stakingToken.address), getAddress(earningToken.address))
   const rate = rewardRate ? formatNumber(rewardRate, 2, 10) : '-'
   const isBnbPool = poolCategory === PoolCategory.BINANCE
   const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock)
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
   const isLoading = !userData
-
+  console.log(stakingAddress)
   return (
     <StyledCard isFinished={isFinished && sousId !== 0}>
       <StyledCardHeader
@@ -126,10 +126,9 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
         <DetailsSection
           stakingAddress={
             chainId === 56 || chainId === 97
-              ? getBscScanAddressUrl(pool.contractAddress[chainId])
-              : getEthScanAddressUrl(pool.contractAddress[chainId])
+              ? getBscScanAddressUrl(stakingAddress)
+              : getEthScanAddressUrl(stakingAddress)
           }
-          lpInfoAddress=""
         />
       </Flex>
     </StyledCard>
