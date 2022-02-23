@@ -52,7 +52,7 @@ export const useTokenPrice = (tokenAddress: string) => {
       }
     }
 
-    fetchData()
+    setTimeout(() => fetchData(), 60000)
   }, [setTokenPrice, _tokenAddress, MoralisWeb3Api, chainName])
 
   return { tokenPrice }
@@ -111,7 +111,7 @@ export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: st
       }
     }
 
-    fetchData()
+    setTimeout(() => fetchData(), 60000) 
   }, [setStakingPrice, setRewardPrice, _stakingTokenAddress, _rewardTokenAddress, MoralisWeb3Api, chainName])
 
   return { stakingPrice, rewardPrice }
@@ -201,8 +201,7 @@ export const useFarmPrice = (
         console.error('Unable to fetch data:', error)
       }
     }
-
-    fetchData()
+    setTimeout(() => fetchData(), 60000)
   }, [
     setLPPrice,
     setRewardPrice,
