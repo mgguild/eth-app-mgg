@@ -444,7 +444,7 @@ const Farms: React.FC = () => {
     if ((LPPrice > 0) || (rewardPrice > 0)) {
       setFetchData(false);
     }
-    setTimeout(() => setFetchData(true), 60000);
+    setTimeout(() => setFetchData(true), 12000);
     if ((LPPrice !== prevLPPrice) || (rewardPrice !== prevRewardPrice)) {
       setFetchData(true);
     } else setFetchData(false);
