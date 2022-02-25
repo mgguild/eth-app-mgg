@@ -453,7 +453,7 @@ const Farms: React.FC = () => {
       } else {
         setFetchData(false);
       }
-    }, 30000);
+    }, 60000);
     if ((prevLPPrice === LPPrice) || (prevRewardPrice === rewardPrice)) {
       setFetchData(false);
     }
