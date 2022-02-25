@@ -9,7 +9,7 @@ import { useWeb3React } from '@web3-react/core'
 export const useTokenPrice = (tokenAddress: string) => {
   const MoralisWeb3Api = useMoralisWeb3Api()
   const { chainId } = useWeb3React()
-
+  console.log('useTokenPrice')
   let chainName: 'eth' | 'ropsten' | 'bsc' | 'bsc testnet' = 'eth'
   switch (chainId) {
     case 1:
@@ -51,8 +51,7 @@ export const useTokenPrice = (tokenAddress: string) => {
         console.error('Unable to fetch data:', error)
       }
     }
-
-    setTimeout(() => fetchData(), 60000)
+    fetchData()
   }, [setTokenPrice, _tokenAddress, MoralisWeb3Api, chainName])
 
   return { tokenPrice }
@@ -61,7 +60,6 @@ export const useTokenPrice = (tokenAddress: string) => {
 export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: string) => {
   const MoralisWeb3Api = useMoralisWeb3Api()
   const { chainId } = useWeb3React()
-
   let chainName: 'eth' | 'ropsten' | 'bsc' | 'bsc testnet' = 'eth'
   switch (chainId) {
     case 1:
@@ -110,8 +108,7 @@ export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: st
         console.error('Unable to fetch data:', error)
       }
     }
-
-    setTimeout(() => fetchData(), 60000) 
+    fetchData()
   }, [setStakingPrice, setRewardPrice, _stakingTokenAddress, _rewardTokenAddress, MoralisWeb3Api, chainName])
 
   return { stakingPrice, rewardPrice }
@@ -138,13 +135,13 @@ export const useFarmPrice = (
   token2Address: string,
   rewardTokenAddress: string,
   lpAddress: string,
+  isFetchData?: boolean,
 ) => {
   const MoralisWeb3Api = useMoralisWeb3Api()
   const { chainId } = useWeb3React()
   const chainName = networkFinder(chainId)
   const [LPPrice, setLPPrice] = useState(0)
   const [rewardPrice, setRewardPrice] = useState(0)
-
   const web3 = useWeb3()
   let _token1Address
   let _token2Address
@@ -201,8 +198,13 @@ export const useFarmPrice = (
         console.error('Unable to fetch data:', error)
       }
     }
-    setTimeout(() => fetchData(), 60000)
+    if (isFetchData) {
+      fetchData()
+    }
+   
+   
   }, [
+    isFetchData,
     setLPPrice,
     setRewardPrice,
     lpTotalSupply,
