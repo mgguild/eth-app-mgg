@@ -425,7 +425,7 @@ const Farms: React.FC = () => {
     )
   }
 
-  const [ isFetchData, setFetchData] = useState<boolean | null>(null); 
+  const [ isFetchData, setFetchData] = useState<boolean | null>(true); 
   
   const mggFarm = farmsStakedMemoized.filter((farm) => farm.isMain)[0]
   
@@ -437,17 +437,25 @@ const Farms: React.FC = () => {
     mggFarm.lpAddresses[mggFarm.chain],
     isFetchData, 
   )
+  
   const prevLPPrice = usePrevious(LPPrice);
   const prevRewardPrice = usePrevious(rewardPrice);
-
+  // console.log(`this is cur: ${LPPrice}`)
+  // console.log(`this is prev: ${prevLPPrice}`)
   useEffect(() => {
     if ((LPPrice > 0) || (rewardPrice > 0)) {
       setFetchData(false);
-    }
-    setTimeout(() => setFetchData(true), 12000);
-    if ((LPPrice !== prevLPPrice) || (rewardPrice !== prevRewardPrice)) {
+    }   
+    setTimeout(() => {
       setFetchData(true);
-    } else setFetchData(false);
+      if ((LPPrice !== prevLPPrice) || (rewardPrice !== prevRewardPrice)) {
+        setFetchData(true);
+      } else {
+        setFetchData(false);
+      }
+      console.log('30 sec mark')
+    }, 30000);
+
     
   }, [LPPrice, rewardPrice, setFetchData, prevLPPrice, prevRewardPrice])
 
