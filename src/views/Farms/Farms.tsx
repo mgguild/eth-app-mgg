@@ -453,9 +453,10 @@ const Farms: React.FC = () => {
       } else {
         setFetchData(false);
       }
-      console.log('30 sec mark')
     }, 30000);
-
+    if ((prevLPPrice === LPPrice) || (prevRewardPrice === rewardPrice)) {
+      setFetchData(false);
+    }
     
   }, [LPPrice, rewardPrice, setFetchData, prevLPPrice, prevRewardPrice])
 
