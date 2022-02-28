@@ -458,8 +458,11 @@ const Farms: React.FC = () => {
       setFetchData(false);
     }
     
-    return setFetchData(null);
   }, [LPPrice, rewardPrice, setFetchData, prevLPPrice, prevRewardPrice])
+
+  useEffect(() => {
+    return setFetchData(null)
+  }, [])
 
   const farmV2Apr = useMemo(
     () => getFarmV2Apr(LPPrice, rewardPrice, Number(mggFarm.totalDeposits), Number(mggFarm.rewardRate)),

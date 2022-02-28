@@ -259,10 +259,12 @@ const Pools: React.FC = () => {
       setFetchData(false);
     }
     
-    return setFetchData(null)
+    
   }, [stakingPrice, rewardPrice, setFetchData, prevStakingPrice, prevRewardPrice])
 
-
+  useEffect(() => {
+    return setFetchData(null)
+  }, [])
   const poolApr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock) ?? 0
   const apr = poolApr > 0 ? `${poolApr.toFixed(2)} %` : <ReactLoading type="spin" height="20px" width="20px"/>
   const tvr = useMemo(
