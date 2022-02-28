@@ -6,10 +6,24 @@ import { getBalanceNumber } from 'utils/formatBalance'
 import { useMoralis, useMoralisWeb3Api } from 'react-moralis'
 import { useWeb3React } from '@web3-react/core'
 
+const networkFinder = (networkId: number) => {
+  switch (networkId) {
+    case 1:
+      return 'eth'
+    case 3:
+      return 'ropsten'
+    case 56:
+      return 'bsc'
+    case 97:
+      return 'bsc testnet'
+    default:
+      return 'eth'
+  }
+}
+
 export const useTokenPrice = (tokenAddress: string) => {
   const MoralisWeb3Api = useMoralisWeb3Api()
   const { chainId } = useWeb3React()
-  console.log('useTokenPrice')
   let chainName: 'eth' | 'ropsten' | 'bsc' | 'bsc testnet' = 'eth'
   switch (chainId) {
     case 1:
@@ -57,28 +71,11 @@ export const useTokenPrice = (tokenAddress: string) => {
   return { tokenPrice }
 }
 
-export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: string) => {
+export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: string, isFetchData?: boolean) => {
   const MoralisWeb3Api = useMoralisWeb3Api()
   const { chainId } = useWeb3React()
   let chainName: 'eth' | 'ropsten' | 'bsc' | 'bsc testnet' = 'eth'
-  switch (chainId) {
-    case 1:
-      chainName = 'eth'
-      break
-    case 3:
-      chainName = 'ropsten'
-      break
-    case 56:
-      chainName = 'bsc'
-      break
-    case 97:
-      chainName = 'bsc testnet'
-      break
-    default:
-      chainName = 'eth'
-      break
-  }
-
+  chainName = networkFinder(chainId)
   const [stakingPrice, setStakingPrice] = useState(0)
   const [rewardPrice, setRewardPrice] = useState(0)
 
@@ -108,25 +105,13 @@ export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: st
         console.error('Unable to fetch data:', error)
       }
     }
-    fetchData()
-  }, [setStakingPrice, setRewardPrice, _stakingTokenAddress, _rewardTokenAddress, MoralisWeb3Api, chainName])
+    if (isFetchData){
+      fetchData()
+    }
+    
+  }, [setStakingPrice, setRewardPrice, _stakingTokenAddress, _rewardTokenAddress, MoralisWeb3Api, chainName, isFetchData])
 
   return { stakingPrice, rewardPrice }
-}
-
-const networkFinder = (networkId: number) => {
-  switch (networkId) {
-    case 1:
-      return 'eth'
-    case 3:
-      return 'ropsten'
-    case 56:
-      return 'bsc'
-    case 97:
-      return 'bsc testnet'
-    default:
-      return 'eth'
-  }
 }
 
 export const useFarmPrice = (

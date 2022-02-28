@@ -458,6 +458,7 @@ const Farms: React.FC = () => {
       setFetchData(false);
     }
     
+    return setFetchData(null);
   }, [LPPrice, rewardPrice, setFetchData, prevLPPrice, prevRewardPrice])
 
   const farmV2Apr = useMemo(
@@ -471,7 +472,7 @@ const Farms: React.FC = () => {
     () => new BigNumber(mggFarm.lpTotalSupply).times(LPPrice).toFixed(4),
     [mggFarm.lpTotalSupply, LPPrice],
   )
-
+    
   return (
     <>
       <PageHeader>

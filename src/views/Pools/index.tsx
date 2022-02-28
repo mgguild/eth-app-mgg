@@ -5,12 +5,14 @@ import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { Heading, Flex, Image } from '@pancakeswap/uikit'
 import { Text } from '@sparkpointio/sparkswap-uikit'
+import ReactLoading from 'react-loading'
 import orderBy from 'lodash/orderBy'
 import partition from 'lodash/partition'
 import { SvgIcon } from '@material-ui/core'
 import { useTranslation } from 'contexts/Localization'
 import usePersistState from 'hooks/usePersistState'
 import { usePoolPrice } from 'hooks/price'
+import usePrevious from 'hooks/refHelpers'
 import { usePools, useFetchCakeVault, useFetchPublicPoolsData, usePollFarmsData, useCakeVault } from 'state/hooks'
 import { latinise } from 'utils/latinise'
 import { getPoolApr } from 'utils/apr'
@@ -33,6 +35,7 @@ import { ViewMode } from './components/ToggleView/ToggleView'
 import { getAprData, getCakeVaultEarnings } from './helpers'
 import { ReactComponent as FarmsDarkLogo } from './components/assets/farm-dark.svg'
 import { ReactComponent as FarmsLightLogo } from './components/assets/farm-light.svg'
+
 
 
 const CardLayout = styled(FlexLayout)`
@@ -228,14 +231,44 @@ const Pools: React.FC = () => {
     </CardLayout>
   )
 
+  const [ isFetchData, setFetchData] = useState<boolean | null>(true); 
+
   const tableLayout = <PoolsTable pools={poolsToShow()} account={account} userDataLoaded={userDataLoaded} />
   const { path, url, isExact } = useRouteMatch()
   const mggPool = openPools.filter((pool) => pool.mainPool)[0];
   const totalStaked = mggPool.totalStaked ? getBalanceNumber(new BigNumber(mggPool.totalStaked.toString()), mggPool.stakingToken.decimals) : 0
   const rewardPerBlock = mggPool?.tokenPerBlock ? getBalanceNumber(new BigNumber(mggPool.tokenPerBlock.toString()), mggPool.earningToken.decimals) : 0
-  const {stakingPrice, rewardPrice} = usePoolPrice(mggPool.stakingToken.address[chainId], mggPool.earningToken.address[chainId])
-  const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock) ?? '0'
+  const {stakingPrice, rewardPrice} = usePoolPrice(mggPool.stakingToken.address[mggPool.chainId], mggPool.earningToken.address[mggPool.chainId], isFetchData)
 
+  const prevStakingPrice = usePrevious(stakingPrice);
+  const prevRewardPrice = usePrevious(rewardPrice)
+
+  useEffect(() => {
+    if ((stakingPrice > 0) || (rewardPrice > 0)) {
+      setFetchData(false);
+    }   
+    setTimeout(() => {
+      setFetchData(true);
+      if ((stakingPrice !== prevStakingPrice) || (rewardPrice !== prevRewardPrice)) {
+        setFetchData(true);
+      } else {
+        setFetchData(false);
+      }
+    }, 60000);
+    if ((prevStakingPrice === stakingPrice) || (prevRewardPrice === rewardPrice)) {
+      setFetchData(false);
+    }
+    
+    return setFetchData(null)
+  }, [stakingPrice, rewardPrice, setFetchData, prevStakingPrice, prevRewardPrice])
+
+
+  const poolApr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock) ?? 0
+  const apr = poolApr > 0 ? `${poolApr.toFixed(2)} %` : <ReactLoading type="spin" height="20px" width="20px"/>
+  const tvr = useMemo(
+    () => new BigNumber(totalStaked).times(stakingPrice).toFixed(4),
+    [totalStaked, stakingPrice])
+    
   return (
     <>
       <PageHeader>
@@ -268,18 +301,18 @@ const Pools: React.FC = () => {
                 </Text>
                 <Text fontSize="20px"> {totalStaked} {mggPool.stakingToken.symbol}</Text>
               </Flex>
-              {/* <Flex flexDirection="column">
+              <Flex flexDirection="column">
                 <Text fontSize="17px" bold color={theme.colors.MGG_accent2}>
                   Total Value Locked
                 </Text>
-                <Text fontSize="20px">- USD</Text>
+                <Text fontSize="20px">{Number(tvr) > 0? `${tvr} USD` : <ReactLoading type="spin" height="20px" width="20px"/> }</Text>
               </Flex>
               <Flex flexDirection="column">
                 <Text fontSize="17px" bold color={theme.colors.MGG_accent2}>
                   APR
                 </Text>
-                <Text fontSize="20px"> {apr} % </Text>
-              </Flex> */}
+                <Text fontSize="20px"> {apr} </Text>
+              </Flex>
             </InfoBox>
           </Flex>
         </Flex>

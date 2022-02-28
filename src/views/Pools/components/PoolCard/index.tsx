@@ -8,6 +8,7 @@ import { PoolCategory } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { usePoolPrice } from 'hooks/price'
+import usePrevious from 'hooks/refHelpers'
 import { getPoolApr } from 'utils/apr'
 import { getBscScanAddressUrl, getEthScanAddressUrl } from 'utils/bscscan'
 import { Pool } from 'state/types'
@@ -57,13 +58,34 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
   const { shouldShowBlockCountdown, blocksUntilStart, blocksRemaining, hasPoolStarted, blocksToDisplay } =
     getPoolBlockInfo(pool, currentBlock)
   const stakingAddress = getAddress(pool.contractAddress)
-  const { stakingPrice, rewardPrice } = usePoolPrice(getAddress(stakingToken.address), getAddress(earningToken.address))
+
+  // const [ isFetchData, setFetchData ] = useState<boolean | null>(true)
+  // const { stakingPrice, rewardPrice } = usePoolPrice(getAddress(stakingToken.address), getAddress(earningToken.address), isFetchData)
+  // const prevStakingPrice = usePrevious(stakingPrice);
+  // const prevRewardPrice = usePrevious(rewardPrice)
+
+  // useEffect(() => {
+  //   if ((stakingPrice > 0) || (rewardPrice > 0)) {
+  //     setFetchData(false);
+  //   }   
+  //   setTimeout(() => {
+  //     setFetchData(true);
+  //     if ((stakingPrice !== prevStakingPrice) || (rewardPrice !== prevRewardPrice)) {
+  //       setFetchData(true);
+  //     } else {
+  //       setFetchData(false);
+  //     }
+  //   }, 60000);
+  //   if ((prevStakingPrice === stakingPrice) || (prevRewardPrice === rewardPrice)) {
+  //     setFetchData(false);
+  //   }   
+  // }, [stakingPrice, rewardPrice, setFetchData, prevStakingPrice, prevRewardPrice])
+
   const rate = rewardRate ? formatNumber(rewardRate, 2, 10) : '-'
   const isBnbPool = poolCategory === PoolCategory.BINANCE
-  const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock)
+  // const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock)
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
   const isLoading = !userData
-  console.log(stakingAddress)
   return (
     <StyledCard isFinished={isFinished && sousId !== 0}>
       <StyledCardHeader
