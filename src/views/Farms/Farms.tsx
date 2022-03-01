@@ -428,9 +428,9 @@ const Farms: React.FC = () => {
   const [ isFetchData, setFetchData] = useState<boolean | null>(true); 
   
   const mggFarm = farmsStakedMemoized.filter((farm) => farm.isMain)[0]
-  
+  const lpTotalSupply = getBalanceNumber(new BigNumber(mggFarm.totalDeposits))
   const { LPPrice, rewardPrice } = useFarmPrice(
-    Number(mggFarm.lpTotalSupply),
+    Number(lpTotalSupply),
     mggFarm.token.address[mggFarm.chain],
     mggFarm.pairToken.address[mggFarm.chain],
     mggFarm.quoteToken.address[mggFarm.chain],
@@ -440,8 +440,6 @@ const Farms: React.FC = () => {
   
   const prevLPPrice = usePrevious(LPPrice);
   const prevRewardPrice = usePrevious(rewardPrice);
-  // console.log(`this is cur: ${LPPrice}`)
-  // console.log(`this is prev: ${prevLPPrice}`)
   useEffect(() => {
     if ((LPPrice > 0) || (rewardPrice > 0)) {
       setFetchData(false);
@@ -468,8 +466,8 @@ const Farms: React.FC = () => {
     () => getFarmV2Apr(LPPrice, rewardPrice, Number(mggFarm.totalDeposits), Number(mggFarm.rewardRate)),
     [LPPrice, rewardPrice, mggFarm.totalDeposits, mggFarm.rewardRate],
   )
-  const apr = farmV2Apr > 0 ? `${farmV2Apr.toFixed(2)} ` : <ReactLoading type="spin" height="20px" width="20px"/>
-  const totalStaked = getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)
+  const apr = farmV2Apr > 0 ? `${farmV2Apr.toFixed(2)} %` : <ReactLoading type="spin" height="20px" width="20px"/>
+  const totalStaked = Number(getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)) > 0 ? `${getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)} ${mggFarm.lpSymbol}`: <ReactLoading type="spin" height="20px" width="20px" />
   // const tvr = useMemo(() => (new BigNumber(totalStaked).times(LPPrice)).toFixed(4), [totalStaked, LPPrice])
   const tvr = useMemo(
     () => new BigNumber(mggFarm.lpTotalSupply).times(LPPrice).toFixed(4),
@@ -508,7 +506,7 @@ const Farms: React.FC = () => {
                 </Text>
                 <Text fontSize="20px">
                   {' '}
-                  {totalStaked} {mggFarm.lpSymbol}
+                  {totalStaked}
                 </Text>
               </Flex>
               <Flex flexDirection="column">
