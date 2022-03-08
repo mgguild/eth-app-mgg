@@ -31,6 +31,9 @@ export const PANCAKE_EXCHANGE_URL = 'https://pancakeswap.finance'
 export const PANCAKE_ADD_LIQUIDITY_URL = `${PANCAKE_EXCHANGE_URL}/add`
 export const BASE_BSC_SCAN_URL = 'https://bscscan.com'
 export const BASE_ETH_SCAN_URL = 'https://etherscan.io'
+export const REACT_APP_MORALIS_APP_ID = ''
+export const REACT_APP_MORALIS_SERVER_URL = ''
+
 export const LOTTERY_MAX_NUMBER_OF_TICKETS = 50
 export const LOTTERY_TICKET_PRICE = 1
 export const DEFAULT_TOKEN_DECIMAL = BIG_TEN.pow(18)
