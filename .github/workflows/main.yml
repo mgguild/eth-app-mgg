@@ -27,7 +27,7 @@ jobs:
       - uses: Borales/actions-yarn@v2.3.0
         with:
           cmd: |
-            add
+            install
             deploy
         env:
           REACT_APP_MORALIS_APP_ID: ${{ secrets.REACT_APP_MORALIS_APP_ID }}
