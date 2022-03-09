@@ -29,5 +29,6 @@ jobs:
           branch: gh-pages # The branch the action should deploy to.
           folder: build # The folder the action should deploy.        
         env:
+          CI: false
           REACT_APP_MORALIS_APP_ID: ${{ secrets.REACT_APP_MORALIS_APP_ID }}
           REACT_APP_MORALIS_SERVER_URL: ${{ secrets.REACT_APP_MORALIS_SERVER_URL }}
