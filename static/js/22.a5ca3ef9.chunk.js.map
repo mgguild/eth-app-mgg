@@ -1,0 +1,1 @@
+{"version":3,"sources":["views/Lottery/components/PastDrawsHistory/BarChartWrapper.tsx"],"names":["Bar"],"mappings":"sHAAA,qBAEeA,YAAf","file":"static/js/22.a5ca3ef9.chunk.js","sourcesContent":["import { Bar } from 'react-chartjs-2'\n\nexport default Bar\n"],"sourceRoot":""}
