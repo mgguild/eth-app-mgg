@@ -1,56 +1,30 @@
-# This is a basic workflow to help you get started with Actions
+name: Github Pages Deploy
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the develop branch
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - "master"
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      matrix:
+        node-version: [15.x]
+    
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3.0.0
+
+      - name: Install and build
+        run: npm install && npm run build
       
-      - name: Jekyll Actions
-        # You may pin to the exact commit or the version.
-        # uses: helaili/jekyll-action@8db04b1668404aa98f95c50219831db72ea34cfa
-        uses: helaili/jekyll-action@2.3.1
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.2.5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages # The branch the action should deploy to.
+          folder: build # The folder the action should deploy.    
         env:
           REACT_APP_MORALIS_APP_ID: ${{ secrets.REACT_APP_MORALIS_APP_ID }}
           REACT_APP_MORALIS_SERVER_URL: ${{ secrets.REACT_APP_MORALIS_SERVER_URL }}
-      # - uses: Borales/actions-yarn@v2.3.0
-      #  with:
-      #    cmd: |
-      #      install
-      #      deploy
-      #  env:
-      #    REACT_APP_MORALIS_APP_ID: ${{ secrets.REACT_APP_MORALIS_APP_ID }}
-      #    REACT_APP_MORALIS_SERVER_URL: ${{ secrets.REACT_APP_MORALIS_SERVER_URL }}
-
-      # Runs a single command using the runners shell
-      # - name: Deploy
-      # run: yarn deploy
-      #  env:
-      #    REACT_APP_MORALIS_APP_ID: ${{ secrets.REACT_APP_MORALIS_APP_ID }}
-      #    REACT_APP_MORALIS_SERVER_URL: ${{ secrets.REACT_APP_MORALIS_SERVER_URL }}
-      # Runs a set of commands using the runners shell
-      # - name: Run a multi-line script
-      # run: |
-      #    echo Add other actions to build,
-      #    echo test, and deploy your project.
