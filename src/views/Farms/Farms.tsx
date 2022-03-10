@@ -437,7 +437,6 @@ const Farms: React.FC = () => {
     mggFarm.lpAddresses[mggFarm.chain],
     isFetchData, 
   )
-  
   const prevLPPrice = usePrevious(LPPrice);
   const prevRewardPrice = usePrevious(rewardPrice);
   useEffect(() => {
