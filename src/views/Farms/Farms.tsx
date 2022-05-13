@@ -1,23 +1,24 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import usePrevious from 'hooks/refHelpers'
 import { Route, useLocation, useRouteMatch } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { Flex, Image, RowType, Toggle } from '@pancakeswap/uikit'
+import { Oval } from 'react-loading-icons'
 import { Text } from '@sparkpointio/sparkswap-uikit'
 import styled, { ThemeContext } from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
-import ReactLoading from 'react-loading'
 import Page from 'components/layout/Page'
 import useMedia from 'use-media'
 import { SvgIcon } from '@material-ui/core'
 import { useFarms, usePollFarmsData, usePriceCakeBusd } from 'state/hooks'
 import usePersistState from 'hooks/usePersistState'
 import { useFarmPrice } from 'hooks/price'
+import usePrevious from 'utils/refHelpers'
 import { Farm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber, getBalanceAmount } from 'utils/formatBalance'
 import { getFarmApr, getFarmV2Apr } from 'utils/apr'
+import useTokenBalance from 'hooks/useTokenBalance'
 import { orderBy } from 'lodash'
 import isArchivedPid from 'utils/farmHelpers'
 import { latinise } from 'utils/latinise'
@@ -31,6 +32,7 @@ import { RowProps } from './components/FarmTable/Row'
 import { DesktopColumnSchema, ViewMode } from './components/types'
 import { ReactComponent as FarmsDarkLogo } from './components/assets/farm-dark.svg'
 import { ReactComponent as FarmsLightLogo } from './components/assets/farm-light.svg'
+import { MAINNET_CHAIN_ID } from '../../config'
 
 const ControlContainer = styled.div`
   display: flex;
@@ -123,6 +125,7 @@ const Farms: React.FC = () => {
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = usePersistState(ViewMode.CARD, { localStorageKey: 'sparkswap_farm_view' })
   const { account, chainId } = useWeb3React()
+  const chain = chainId ? chainId.toString() : MAINNET_CHAIN_ID
   const [sortOption, setSortOption] = useState('earned')
   const theme = useContext(ThemeContext)
   const isArchived = pathname.includes('archived')
@@ -130,7 +133,6 @@ const Farms: React.FC = () => {
   const isActive = !isInactive && !isArchived
   const isMobile = useMedia({ maxWidth: 500 })
   usePollFarmsData(isArchived)
-
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded
   const userDataReady = !account || (!!account && userDataLoaded)
@@ -142,21 +144,23 @@ const Farms: React.FC = () => {
   // const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && !farm.hasEnded && !isArchivedPid(farm.pid))
   // const inactiveFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.hasEnded && !isArchivedPid(farm.pid))
   // const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
-  const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && !farm.hasEnded && !isArchivedPid(farm.pid))
-  const inactiveFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.hasEnded && !isArchivedPid(farm.pid))
-  const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
+  const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.chain === chain)
+  // const inactiveFarms = farmsLP.filter(
+  //   (farm) => farm.pid !== 0 && farm.hasEnded && !isArchivedPid(farm.pid) && farm.chain === chain,
+  // )
+  // const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid) && farm.chain === chain)
 
   const stakedOnlyFarms = activeFarms.filter(
     (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
   )
 
-  const stakedInactiveFarms = inactiveFarms.filter(
-    (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
-  )
-
-  const stakedArchivedFarms = archivedFarms.filter(
-    (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
-  )
+  // const stakedInactiveFarms = inactiveFarms.filter(
+  //   (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
+  // )
+  //
+  // const stakedArchivedFarms = archivedFarms.filter(
+  //   (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
+  // )
 
   const farmsList = useCallback(
     (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
@@ -192,7 +196,6 @@ const Farms: React.FC = () => {
 
   const [numberOfFarmsVisible, setNumberOfFarmsVisible] = useState(NUMBER_OF_FARMS_VISIBLE)
   const [observerIsSet, setObserverIsSet] = useState(false)
-
   const farmsStakedMemoized = useMemo(() => {
     let farmsStaked = []
 
@@ -231,28 +234,27 @@ const Farms: React.FC = () => {
       }
     }
 
-    if (isActive) {
-      farmsStaked = stakedOnly ? farmsList(stakedOnlyFarms) : farmsList(activeFarms)
-    }
-    if (isInactive) {
-      farmsStaked = stakedOnly ? farmsList(stakedInactiveFarms) : farmsList(inactiveFarms)
-    }
-    if (isArchived) {
-      farmsStaked = stakedOnly ? farmsList(stakedArchivedFarms) : farmsList(archivedFarms)
-    }
-
+    farmsStaked = stakedOnly ? farmsList(stakedOnlyFarms) : farmsList(activeFarms)
+    // if (isActive) {
+    // }
+    // if (isInactive) {
+    //   farmsStaked = stakedOnly ? farmsList(stakedInactiveFarms) : farmsList(inactiveFarms)
+    // }
+    // if (isArchived) {
+    //   farmsStaked = stakedOnly ? farmsList(stakedArchivedFarms) : farmsList(archivedFarms)
+    // }
     return sortFarms(farmsStaked).slice(0, numberOfFarmsVisible)
   }, [
     sortOption,
     activeFarms,
     farmsList,
-    inactiveFarms,
-    archivedFarms,
-    isActive,
-    isInactive,
-    isArchived,
-    stakedArchivedFarms,
-    stakedInactiveFarms,
+    // inactiveFarms,
+    // archivedFarms,
+    // isActive,
+    // isInactive,
+    // isArchived,
+    // stakedArchivedFarms,
+    // stakedInactiveFarms,
     stakedOnly,
     stakedOnlyFarms,
     numberOfFarmsVisible,
@@ -281,7 +283,7 @@ const Farms: React.FC = () => {
   }, [farmsStakedMemoized, observerIsSet])
 
   const rowData = farmsStakedMemoized.map((farm) => {
-    const { token, quoteToken, totalRewardRate } = farm
+    const { token, quoteToken } = farm
     const tokenAddress = token.address
     const quoteTokenAddress = quoteToken.address
     const lpLabel = farm.lpSymbol && farm.lpSymbol.split(' ')[0].toUpperCase().replace('PANCAKE', '')
@@ -399,80 +401,80 @@ const Farms: React.FC = () => {
     setSortOption(option.value)
   }
 
-  const renderInactiveContent = (): JSX.Element => {
-    return (
-      <div>
-        <div style={{ margin: '20px' }}>
-          <Text fontSize="24px" bold>
-            {' '}
-            Inactive Liquidity Pools{' '}
-          </Text>
-        </div>
+  // const renderInactiveContent = (): JSX.Element => {
+  //   return (
+  //     <div>
+  //       <div style={{ margin: '20px' }}>
+  //         <Text fontSize="24px" bold>
+  //           {' '}
+  //           Inactive Liquidity Pools{' '}
+  //         </Text>
+  //       </div>
+  //
+  //       <FlexLayout>
+  //         {farmsList(inactiveFarms).map((farm) => (
+  //           <FarmCard
+  //             userDataReady={userDataReady}
+  //             key={farm.pid}
+  //             farm={farm}
+  //             cakePrice={cakePrice}
+  //             account={account}
+  //             removed
+  //           />
+  //         ))}
+  //       </FlexLayout>
+  //     </div>
+  //   )
+  // }
 
-        <FlexLayout>
-          {farmsList(inactiveFarms).map((farm) => (
-            <FarmCard
-              userDataReady={userDataReady}
-              key={farm.pid}
-              farm={farm}
-              cakePrice={cakePrice}
-              account={account}
-              removed
-            />
-          ))}
-        </FlexLayout>
-      </div>
-    )
-  }
-
-  const [ isFetchData, setFetchData] = useState<boolean | null>(true); 
-  
+  const [isFetchData, setFetchData] = useState<boolean | null>(true)
   const mggFarm = farmsStakedMemoized.filter((farm) => farm.isMain)[0]
-  const lpTotalSupply = getBalanceNumber(new BigNumber(mggFarm.totalDeposits))
-  const { LPPrice, rewardPrice } = useFarmPrice(
-    Number(lpTotalSupply),
-    mggFarm.token.address[mggFarm.chain],
-    mggFarm.pairToken.address[mggFarm.chain],
-    mggFarm.quoteToken.address[mggFarm.chain],
-    mggFarm.lpAddresses[mggFarm.chain],
-    isFetchData, 
-  )
-  const prevLPPrice = usePrevious(LPPrice);
-  const prevRewardPrice = usePrevious(rewardPrice);
-  useEffect(() => {
-    if ((LPPrice > 0) || (rewardPrice > 0)) {
-      setFetchData(false);
-    }   
-    setTimeout(() => {
-      setFetchData(true);
-      if ((LPPrice !== prevLPPrice) || (rewardPrice !== prevRewardPrice)) {
-        setFetchData(true);
-      } else {
-        setFetchData(false);
-      }
-    }, 60000);
-    if ((prevLPPrice === LPPrice) || (prevRewardPrice === rewardPrice)) {
-      setFetchData(false);
-    }
-    
-  }, [LPPrice, rewardPrice, setFetchData, prevLPPrice, prevRewardPrice])
 
+  // const token1Balance = useTokenBalance(mggFarm.token.address[chainId], mggFarm.lpAddresses[chainId])
+  // const token2Balance = useTokenBalance(mggFarm.pairToken.address[chainId], mggFarm.lpAddresses[chainId])
+
+  const { LPPrice, rewardPrice } = useFarmPrice(mggFarm, chain, isFetchData)
+  const prevLPPrice = usePrevious(LPPrice)
+  const prevRewardPrice = usePrevious(rewardPrice)
+  useEffect(() => {
+    if (LPPrice > 0 || rewardPrice > 0) {
+      setFetchData(false)
+    }
+    setTimeout(() => {
+      setFetchData(true)
+      if (LPPrice !== prevLPPrice || rewardPrice !== prevRewardPrice) {
+        setFetchData(true)
+      } else {
+        setFetchData(false)
+      }
+    }, 60000)
+    if (prevLPPrice === LPPrice || prevRewardPrice === rewardPrice) {
+      setFetchData(false)
+    }
+  }, [LPPrice, rewardPrice, setFetchData, prevLPPrice, prevRewardPrice])
   useEffect(() => {
     return setFetchData(null)
   }, [])
+  const totalDeposits = mggFarm ? mggFarm.totalDeposits : 0
+  const rewardRate = mggFarm ? mggFarm.rewardRate : 0
+  const lpSymbol = mggFarm ? mggFarm.lpSymbol : 'N/A'
+  const lpTotalSupply = mggFarm ? mggFarm.lpTotalSupply : 'N/A'
 
-  const farmV2Apr = useMemo(
-    () => getFarmV2Apr(LPPrice, rewardPrice, Number(mggFarm.totalDeposits), Number(mggFarm.rewardRate)),
-    [LPPrice, rewardPrice, mggFarm.totalDeposits, mggFarm.rewardRate],
-  )
-  const apr = farmV2Apr > 0 ? `${farmV2Apr.toFixed(2)} %` : <ReactLoading type="spin" height="20px" width="20px"/>
-  const totalStaked = Number(getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)) > 0 ? `${getBalanceAmount(new BigNumber(mggFarm.totalDeposits ?? 0)).toFormat(4)} ${mggFarm.lpSymbol}`: <ReactLoading type="spin" height="20px" width="20px" />
-  // const tvr = useMemo(() => (new BigNumber(totalStaked).times(LPPrice)).toFixed(4), [totalStaked, LPPrice])
+  const farmV2Apr = useMemo(() => {
+    return getFarmV2Apr(LPPrice, rewardPrice, Number(totalDeposits), Number(rewardRate))
+  }, [totalDeposits, rewardRate, LPPrice, rewardPrice])
+
+  const apr = farmV2Apr > 0 ? `${farmV2Apr.toFixed(2)} %` : <Oval width="20px" height="20px" />
+  const totalStaked =
+    getBalanceNumber(new BigNumber(totalDeposits)) > 0 ? (
+      `${getBalanceAmount(new BigNumber(totalDeposits)).toFormat(4)} ${lpSymbol}`
+    ) : (
+      <Oval width="20px" height="20px" />
+    )
   const tvr = useMemo(
-    () => new BigNumber(mggFarm.lpTotalSupply).times(LPPrice).toFixed(4),
-    [mggFarm.lpTotalSupply, LPPrice],
+    () => getBalanceAmount(new BigNumber(lpTotalSupply)).times(LPPrice).toFixed(4),
+    [lpTotalSupply, LPPrice],
   )
-    
   return (
     <>
       <PageHeader>
@@ -503,16 +505,15 @@ const Farms: React.FC = () => {
                 <Text fontSize="17px" bold color={theme.colors.MGG_accent2}>
                   Total Tokens Staked
                 </Text>
-                <Text fontSize="20px">
-                  {' '}
-                  {totalStaked}
-                </Text>
+                <Text fontSize="20px"> {totalStaked}</Text>
               </Flex>
               <Flex flexDirection="column">
                 <Text fontSize="17px" bold color={theme.colors.MGG_accent2}>
                   Total Value Locked
                 </Text>
-                <Text fontSize="20px">{Number(tvr) > 0 ? `${tvr} USD` : <ReactLoading type="spin" height="20px" width="20px" /> }</Text>
+                <Text fontSize="20px">
+                  {Number(tvr) > 0 && Number(tvr) !== Infinity ? `${tvr} USD` : <Oval width="20px" height="20px" />}
+                </Text>
               </Flex>
               <Flex flexDirection="column">
                 <Text fontSize="17px" bold color={theme.colors.MGG_accent2}>

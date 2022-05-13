@@ -2,11 +2,12 @@ import React, { useContext, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes, ThemeContext } from 'styled-components'
 import { Flex, Skeleton, Text } from '@sparkpointio/sparkswap-uikit'
+import { useWeb3React } from '@web3-react/core'
 import { Farm } from 'state/types'
 import { useFarmPrice } from 'hooks/price'
 import { getFarmV2Apr } from 'utils/apr'
 import { useTranslation } from 'contexts/Localization'
-import { BASE_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL, BASE_INFO_URL } from 'config'
+import { BASE_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL, BASE_INFO_URL, MAINNET_CHAIN_ID } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
@@ -84,6 +85,9 @@ interface FarmCardProps {
 
 const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakePrice, account }) => {
   const { t } = useTranslation()
+  const { chainId } = useWeb3React()
+  const chain = chainId ? chainId.toString() : MAINNET_CHAIN_ID
+
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
   const formatTotalDeposits = getBalanceAmount(new BigNumber(farm.totalDeposits ?? 0)).toFormat(4)
@@ -105,7 +109,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
   const theme = useContext(ThemeContext)
 
 
-  const {LPPrice, rewardPrice} = useFarmPrice(Number(farm.lpTotalSupply), farm.token.address[farm.chain], farm.pairToken.address[farm.chain], farm.quoteToken.address[farm.chain], farm.lpAddresses[farm.chain])
+  const {LPPrice, rewardPrice} = useFarmPrice(farm, chain)
 
   const aprBlackList = ["0x9f6b80e3867ab402081574e9e0a3be6fdf4ae95b"]
   const apr = (aprBlackList.includes(farm.lpAddresses[farm.chain]) ? null : getFarmV2Apr(LPPrice, rewardPrice, Number(farm.totalDeposits), Number(farm.rewardRate)) )

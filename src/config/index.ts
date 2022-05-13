@@ -50,7 +50,7 @@ export const API_ASSETS = 'assets'
 export const API_SUMMARY = 'summary'
 export const API_LIQUIDITY = 'liquidity'
 export const API_LASTPRICE = 'last_price'
-
+export const API_DATA = 'data'
 
 
 export const BASE_BSC_SCAN_URLS = {
