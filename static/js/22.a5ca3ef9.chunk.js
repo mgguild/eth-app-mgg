@@ -1,2 +1,0 @@
-(this["webpackJsonpmgg-frontend"]=this["webpackJsonpmgg-frontend"]||[]).push([[22],{1810:function(n,t,s){"use strict";s.r(t);var e=s(1764);t.default=e.Bar}}]);
-//# sourceMappingURL=22.a5ca3ef9.chunk.js.map
