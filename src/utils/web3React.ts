@@ -12,11 +12,10 @@ const chainId = parseInt(process.env.REACT_APP_CHAIN_ID, 10)
 const ethMainChainId = parseInt(MAINNET_ETH_CHAIN_ID, 10)
 const ropsChainId = parseInt(ROPSTEN_CHAIN_ID, 10)
 
-const injected = new InjectedConnector({ supportedChainIds: [chainId, ethMainChainId,  ropsChainId] })
+const injected = new InjectedConnector({ supportedChainIds: [ethMainChainId,  ropsChainId] })
 
 const walletconnect = new WalletConnectConnector({
   rpc: {
-    [chainId]: rpcUrl,
     [ethMainChainId]: rpcUrl,
     [ropsChainId]: rpcUrl,
   },
@@ -25,7 +24,7 @@ const walletconnect = new WalletConnectConnector({
   pollingInterval: POLLING_INTERVAL,
 })
 
-const bscConnector = new BscConnector({ supportedChainIds: [chainId, ethMainChainId,  ropsChainId] })
+const bscConnector = new BscConnector({ supportedChainIds: [ethMainChainId,  ropsChainId] })
 
 export const connectorsByName: { [connectorName in ConnectorNames]: any } = {
   [ConnectorNames.Injected]: injected,

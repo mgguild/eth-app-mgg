@@ -103,29 +103,29 @@ const Pools: React.FC = () => {
   }, [poolsWithoutAutoVault])
 
   // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
-  const [ finishedPools, openPools ] = useMemo(() => partition(pools, (pool) => pool.isFinished), [pools])
-  const [ upcomingPools, notUpcomingPools ] = useMemo(() => partition(pools, (pool) => pool.isComingSoon), [pools])
-  const stakedOnlyFinishedPools = useMemo(
-    () =>
-    finishedPools.filter((pool) => {
-        if (pool.isAutoVault) {
-          return accountHasVaultShares
-        }
-        return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0)
-      }),
-    [finishedPools, accountHasVaultShares],
-  )
-  const stakedOnlyOpenPools = useMemo(
-    () =>
-      openPools.filter((pool) => {
-        if (pool.isAutoVault) {
-          return accountHasVaultShares
-        }
-        return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0)
-      }),
-    [openPools, accountHasVaultShares],
-  )
-  const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0
+  // const [ finishedPools, openPools ] = useMemo(() => partition(pools, (pool) => pool.isFinished), [pools])
+  // const [ upcomingPools, notUpcomingPools ] = useMemo(() => partition(pools, (pool) => pool.isComingSoon), [pools])
+  // const stakedOnlyFinishedPools = useMemo(
+  //   () =>
+  //   finishedPools.filter((pool) => {
+  //       if (pool.isAutoVault) {
+  //         return accountHasVaultShares
+  //       }
+  //       return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0)
+  //     }),
+  //   [finishedPools, accountHasVaultShares],
+  // )
+  // const stakedOnlyOpenPools = useMemo(
+  //   () =>
+  //     openPools.filter((pool) => {
+  //       if (pool.isAutoVault) {
+  //         return accountHasVaultShares
+  //       }
+  //       return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0)
+  //     }),
+  //   [openPools, accountHasVaultShares],
+  // )
+  // const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0
 
   usePollFarmsData()
   useFetchCakeVault()
@@ -200,14 +200,14 @@ const Pools: React.FC = () => {
   }
 
   const poolsToShow = () => {
-    let chosenPools = []
-    if (showUpcomingPools) {
-      chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
-    } else if (showFinishedPools) {
-      chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
-    } else {
-      chosenPools = stakedOnly ? stakedOnlyOpenPools : openPools
-    }
+    let chosenPools = pools
+    // if (showUpcomingPools) {
+    //   chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
+    // } else if (showFinishedPools) {
+    //   chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
+    // } else {
+    //   chosenPools = stakedOnly ? stakedOnlyOpenPools : openPools
+    // }
 
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase())
@@ -231,11 +231,11 @@ const Pools: React.FC = () => {
     </CardLayout>
   )
 
-  const [ isFetchData, setFetchData] = useState<boolean | null>(true); 
+  const [ isFetchData, setFetchData] = useState<boolean | null>(true);
 
   const tableLayout = <PoolsTable pools={poolsToShow()} account={account} userDataLoaded={userDataLoaded} />
   const { path, url, isExact } = useRouteMatch()
-  const mggPool = openPools.filter((pool) => pool.mainPool)[0];
+  const mggPool = pools.filter((pool) => pool.mainPool)[0];
   const totalStaked = mggPool.totalStaked ? getBalanceNumber(new BigNumber(mggPool.totalStaked.toString()), mggPool.stakingToken.decimals) : 0
   const rewardPerBlock = mggPool?.tokenPerBlock ? getBalanceNumber(new BigNumber(mggPool.tokenPerBlock.toString()), mggPool.earningToken.decimals) : 0
   const {stakingPrice, rewardPrice} = usePoolPrice(mggPool.stakingToken.address[mggPool.chainId], mggPool.earningToken.address[mggPool.chainId], isFetchData)
@@ -246,7 +246,7 @@ const Pools: React.FC = () => {
   useEffect(() => {
     if ((stakingPrice > 0) || (rewardPrice > 0)) {
       setFetchData(false);
-    }   
+    }
     setTimeout(() => {
       setFetchData(true);
       if ((stakingPrice !== prevStakingPrice) || (rewardPrice !== prevRewardPrice)) {
@@ -258,8 +258,8 @@ const Pools: React.FC = () => {
     if ((prevStakingPrice === stakingPrice) || (prevRewardPrice === rewardPrice)) {
       setFetchData(false);
     }
-    
-    
+
+
   }, [stakingPrice, rewardPrice, setFetchData, prevStakingPrice, prevRewardPrice])
 
   useEffect(() => {
@@ -270,7 +270,7 @@ const Pools: React.FC = () => {
   const tvr = useMemo(
     () => new BigNumber(totalStaked).times(stakingPrice).toFixed(4),
     [totalStaked, stakingPrice])
-    
+
   return (
     <>
       <PageHeader>
@@ -328,7 +328,7 @@ const Pools: React.FC = () => {
           </Text>
             <StyledHr style={{ marginTop: '35px', width: '100%' }} />
 
-           // Header title for Active Pools  
+           // Header title for Active Pools
 
             <Flex justifyContent="space-between" style={{ margin: '20px' }}>
               <Flex flexDirection="column" mr={['8px', 0]}>
